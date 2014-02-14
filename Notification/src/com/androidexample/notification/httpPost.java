@@ -38,7 +38,6 @@ public class httpPost {
 	    }	
 	 public void connect(String url)
 	    {
-	
 	        try {
 	            HttpClient httpclient = new DefaultHttpClient();
 		        HttpGet httpget = new HttpGet(url); 

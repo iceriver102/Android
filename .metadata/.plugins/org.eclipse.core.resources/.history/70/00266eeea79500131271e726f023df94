@@ -1,0 +1,65 @@
+package com.example.bmsaltamedia;
+
+import com.example.http.httpPost;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Context;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class MainActivity extends Activity implements OnClickListener {
+	EditText mEdit_User;
+	EditText mEdit_Pass;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_main);
+		final Button btn_login = (Button) findViewById(R.id.btnlogin);
+		btn_login.setOnClickListener(this);
+
+		mEdit_User = (EditText) findViewById(R.id.txtUser);
+		mEdit_Pass = (EditText) findViewById(R.id.txtPass);
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.btnlogin:
+			submitDataLogin();
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	private void submitDataLogin() {
+		TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String url = "http://bmsled.altamedia.vn/demo/api.php?mod=ALTA_LOGIN&"
+				+ "user=" + mEdit_User.getText().toString() + "&pass="
+				+ mEdit_Pass.getText().toString() + "&ime=" + mngr.getDeviceId();
+		Log.i("url", url);
+		try {
+			httpPost http = new httpPost();
+			http.connect(url);
+			// Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, http.getStringJson(), Toast.LENGTH_SHORT).show();
+		} catch (Exception ex) {
+			Log.d("ERR", ex.getMessage());
+		}
+
+	}
+
+}
