@@ -13,8 +13,10 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="s.length()" key="selection"/>
+		<item value="TAG" key="selection"/>
 		<list key="findhistory">
+			<item value="TAG"/>
+			<item value="mHandleMessageReceiver"/>
 			<item value="s.length()"/>
 			<item value="&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"/>
 		</list>

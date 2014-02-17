@@ -8,5 +8,5 @@
     <string name="btn_login">Đăng Nhập</string>
     <string name="place_user_name">Nhập tên đăng nhập</string>
     <string name="place_user_pass">Nhập mật khẩu</string>
-
+    <string name="http_url">http://bmsled.altamedia.vn/demo/api.php</string>
 </resources>

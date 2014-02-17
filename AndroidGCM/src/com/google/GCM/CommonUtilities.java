@@ -6,10 +6,10 @@ import android.util.Log;
 
 public final class CommonUtilities {
 	// give your server registration url here
-	public static final String SERVER_URL = "http://192.168.10.34/gcm/register.php";
+	public static final String SERVER_URL = "http://192.168.1.102/gcm/register.php";
 
 	// Google project id
-	public static final String SENDER_ID = "319044617652";
+	public static final String SENDER_ID = "737164671250";
 
 	/**
 	 * Tag used on log messages.

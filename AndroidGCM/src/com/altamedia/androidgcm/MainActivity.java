@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 
 		// Get GCM registration id
 		final String regId = GCMRegistrar.getRegistrationId(this);
-
+		Toast.makeText(getApplicationContext(),regId, Toast.LENGTH_LONG).show();
 		// Check if regid already presents
 		if (regId.equals("")) {
 			// Registration is not present, register now with GCM

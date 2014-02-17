@@ -18,8 +18,7 @@ import android.util.Log;
 import com.google.GCM.ServerUtilities;
 import com.google.android.gcm.GCMBaseIntentService;
 public class GCMIntentService extends GCMBaseIntentService{
-	private static final String TAG = "GCMIntentService";
-	
+	private static final String TAG = "GCMIntentService";	
     public GCMIntentService( ) {
         super(SENDER_ID);
     }
