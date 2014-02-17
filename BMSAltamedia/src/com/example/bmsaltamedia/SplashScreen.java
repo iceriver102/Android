@@ -1,6 +1,7 @@
 package com.example.bmsaltamedia;
 
 import com.example.sqllite.MySQLiteHelper;
+import com.google.android.gcm.GCMRegistrar;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,7 +29,8 @@ public class SplashScreen extends Activity {
 				// Start your app main activity
 				MySQLiteHelper db= new MySQLiteHelper(context);
 				if(db.countUser()>0){
-					Toast.makeText(context, "Ban da dang nhap", Toast.LENGTH_LONG).show();
+					Intent i = new Intent(SplashScreen.this, ListView_Reminder.class);
+					startActivity(i);
 				}else{				
 					Intent i = new Intent(SplashScreen.this, MainActivity.class);
 					startActivity(i);

@@ -4,16 +4,16 @@
 		<item value="true" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID"/>
 		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
+			<item value="C:\Users\Giang.Phan\Downloads"/>
 			<item value="C:\Users\Giang.Phan\Desktop\NavigationDrawer\NavigationDrawer"/>
 			<item value="C:\Users\Giang.Phan\Desktop\NavigationDrawer\NavigationDrawer\res"/>
 			<item value="C:\Users\Giang.Phan\Desktop\NavigationDrawer\NavigationDrawer\src\com\example\android\navigationdrawerexample"/>
-			<item value="C:\Users\Giang.Phan\Downloads"/>
 			<item value="D:\Giang.Phan"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="1020" key="dialogWidth"/>
-		<item value="525" key="dialogHeight"/>
+		<item value="960" key="dialogWidth"/>
+		<item value="717" key="dialogHeight"/>
 		<list key="orderedProviders">
 		</list>
 		<list key="textArray">
@@ -25,7 +25,7 @@
 	</section>
 	<section name="WorkbenchPreferenceDialogSettings">
 		<item value="8" key="DIALOG_Y_ORIGIN"/>
-		<item value="360" key="DIALOG_X_ORIGIN"/>
+		<item value="227" key="DIALOG_X_ORIGIN"/>
 	</section>
 	<section name="ImportExportAction">
 		<item value="com.android.ide.eclipse.adt.project.ImportProjectWizard" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>

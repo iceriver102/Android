@@ -24,6 +24,7 @@ public final class CommonUtilities {
 	public static final String EXTRA_MESSAGE = "message";
 	public static final String EXTRA_ACTION = "action";
 	public static final String EXTRA_regid = "regid";
+	public static boolean flag_login=false;
 
 	/**
 	 * Notifies UI to display a message.

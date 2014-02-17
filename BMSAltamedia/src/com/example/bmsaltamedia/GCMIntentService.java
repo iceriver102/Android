@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.example.bmsaltamedia.MainActivity;
 import com.example.bmsaltamedia.R;
+import com.google.GCM.CommonUtilities;
 import com.google.GCM.ServerUtilities;
 import com.google.android.gcm.GCMBaseIntentService;
 
@@ -26,13 +27,15 @@ public class GCMIntentService extends GCMBaseIntentService {
 	public GCMIntentService() {
 		super(SENDER_ID);
 	}
+
 	/**
 	 * Method called on device registered
 	 **/
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(TAG, "Device registered: regId = " + registrationId);
-		//ServerUtilities.register(context, "demo", "demo", registrationId);
+		// ServerUtilities.register(context, "demo", "demo", registrationId);
 	}
+
 	/**
 	 * Method called on device un registred
 	 * */
@@ -42,18 +45,23 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// context.getString(R.string.gcm_unregistered),"");
 		ServerUtilities.unregister(context, registrationId);
 	}
+
 	/**
 	 * Method called on Receiving a new message
 	 * */
 	protected void onMessage(Context context, Intent intent) {
-		Log.i(TAG, "Received message");
-	
-		//Log.i(TAG, intent.getStringExtra("msg"));
-		//displayMessage(context, message, action);
-		
-		
-		// notifies user
-		//generateNotification(context, action, message);
+		String message = intent.getExtras().getString("message");
+		String action = intent.getExtras().getString("action");
+		if (CommonUtilities.flag_login) {
+			Log.i(TAG, "Received message");
+			// Log.i(TAG, intent.getStringExtra("msg"));
+			// displayMessage(context, message, action);			
+			Log.i(TAG, message);
+			// notifies user
+			generateNotification(context, action, message);
+		} else {
+			Log.e(TAG, "Received message cancel msg["+message+"]");
+		}
 	}
 
 	/**
@@ -81,6 +89,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
+
 	private void generateNotification(Context context, String action,
 			String message) {
 		int icon = R.drawable.ic_launcher;

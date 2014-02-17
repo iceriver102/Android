@@ -1,0 +1,33 @@
+package com.example.appData;
+
+import java.util.Date;
+
+public class reminderData {
+	private int msg_id;
+	public String title;
+	public String content;
+	private int status;
+	public Date date;
+
+	public int getID() {
+		return this.msg_id;
+	}
+
+	public void setID(int id) {
+		if (id > 0)
+			this.msg_id = id;
+	}
+	
+	public void setStatus(int status){
+		this.status=status;
+	}
+	public int getStatus(){
+		return this.status;
+	}
+	
+	@Override
+	public String toString(){
+		return "REMINDER[ id:"+this.msg_id+", title:"+this.title+", content:"+this.content+", status:"+this.status+"]";
+	}
+
+}

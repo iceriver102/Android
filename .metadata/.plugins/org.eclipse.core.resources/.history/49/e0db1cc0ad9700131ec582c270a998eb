@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white" >
+
+    <Button
+        android:id="@+id/btn_logOut"
+        android:layout_width="163dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"        
+        android:layout_marginLeft="98dp"
+        android:layout_marginTop="182dp"
+        android:text="Thoát" />
+    <TextView
+        android:id="@+id/txtDemo"
+        android:layout_width="100dp"
+        android:layout_height="57dp"
+        android:layout_alignLeft="@+id/btn_logOut"
+        android:layout_below="@+id/btn_logOut"
+        android:layout_marginLeft="94dp"
+        android:layout_marginTop="103dp"
+        android:layout_weight="0.77"
+        android:text="Xin Chào:  "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/color_black" />
+
+</RelativeLayout>

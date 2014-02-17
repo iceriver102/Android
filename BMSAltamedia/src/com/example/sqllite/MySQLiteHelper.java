@@ -147,7 +147,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		user.fullName = cursor.getString(2);
 		user.setPass(cursor.getString(3));
 		user.date = new java.sql.Date(cursor.getLong(4));
-		Log.d("getBook(" + id + ")", user.toString());
+		Log.d("getUser(" + id + ")", user.toString());
 
 		// 5. return book
 		return user;
@@ -181,7 +181,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			} while (cursor.moveToNext());
 		}
 
-		Log.d("getAllBooks()", list_user.toString());
+		Log.d("getAllUsers()", list_user.toString());
 
 		// return books
 		return list_user;
@@ -222,7 +222,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 		// 3. close
 		db.close();
-		Log.d("deleteBook", user.toString());
+		Log.d("deleteUser", user.toString());
 
 	}
 }
