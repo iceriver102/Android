@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public static String newAction = "";
 	private String regId;
-	@SuppressWarnings("deprecation")
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,12 +59,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		registerReceiver(mHandleMessageReceiver, new IntentFilter(
 				DISPLAY_MESSAGE_ACTION));
-		/*regId = GCMRegistrar.getRegistrationId(this);
+		regId = GCMRegistrar.getRegistrationId(this);
 		if (regId.equals("")) {
 			GCMRegistrar.register(this, SENDER_ID);
 			regId = GCMRegistrar.getRegistrationId(this);
-			Log.d("register", "start register");
-		} else {
+			
+		} /*else {
 			// Device is already registered on GCM
 			if (GCMRegistrar.isRegisteredOnServer(this)) {
 				// Skips registration.
@@ -124,9 +124,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				return;
 			}
 			
-			registerReceiver(mHandleMessageReceiver, new IntentFilter(
-					DISPLAY_MESSAGE_ACTION));
-			regId = GCMRegistrar.getRegistrationId(this);
+			
 			if (regId.equals("")) {
 				GCMRegistrar.register(this, SENDER_ID);
 				regId = GCMRegistrar.getRegistrationId(this);

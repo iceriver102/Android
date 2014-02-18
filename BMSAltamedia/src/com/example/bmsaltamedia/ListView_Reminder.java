@@ -54,9 +54,8 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		arrReminder = new ArrayList<reminderData>();
 		adapter = new reminderArrayAdapter(this, R.layout.item_listview,
 				arrReminder);
-		listView.setAdapter(adapter);
-
-		 applyDemoData(6);
+		listView.setAdapter(adapter);		
+		applyDemoData(100);
 	}
 
 	private void applyDemoData(int num) {
