@@ -20,7 +20,9 @@ public class SplashScreen extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.flash_layout);
+	//	this.deleteDatabase("Alta_BMS.db");
 		final Context context= this;
 		new Handler().postDelayed(new Runnable() {
 			@Override
@@ -28,6 +30,7 @@ public class SplashScreen extends Activity {
 				// This method will be executed once the timer is over
 				// Start your app main activity
 				MySQLiteHelper db= new MySQLiteHelper(context);
+				//db.updateUser(user)
 				if(db.countUser()>0){
 					Intent i = new Intent(SplashScreen.this, ListView_Reminder.class);
 					startActivity(i);

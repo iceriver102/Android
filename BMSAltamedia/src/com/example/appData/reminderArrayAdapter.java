@@ -2,7 +2,9 @@ package com.example.appData;
 
 import java.util.ArrayList;
 
+import com.example.bmsaltamedia.ListView_Reminder;
 import com.example.bmsaltamedia.R;
+import com.google.GCM.ServerUtilities;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -29,51 +31,55 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 		this.layoutId = layoutId;
 		this.myArray = arr;
 	}
+
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = context.getLayoutInflater();
 		convertView = inflater.inflate(layoutId, null);
-		// chỉ là test thôi, bạn có thể bỏ If đi
+
 		if (myArray.size() > 0 && position >= 0) {
-			// dòng lệnh lấy TextView ra để hiển thị Mã và tên lên
+
 			final TextView txtdisplay = (TextView) convertView
 					.findViewById(R.id.item_txtTitle);
-			// lấy ra nhân viên thứ position
+
 			final reminderData emp = myArray.get(position);
 			txtdisplay.setText(emp.title);
-			
-			// lấy ImageView ra để thiết lập hình ảnh cho đúng
-			//final CheckBox check_item = (CheckBox) convertView
-				//	.findViewById(R.id.check_item);
-			final ToggleButton item_btn=(ToggleButton) convertView.findViewById(R.id.item_toggleBtn);
-			//check_item.setTag(emp);
+
+			final CheckBox item_btn = (CheckBox) convertView
+					.findViewById(R.id.item_toggleBtn);
+
 			item_btn.setTag(emp);
-			if (emp.getStatus() == 0) {
+			if (!emp.isComplete()) {
 				item_btn.setChecked(false);
-				//check_item.setChecked(false);
-			} else if (emp.getStatus() == 1) {
-				//check_item.setChecked(true);
-				//check_item.setEnabled(false);
+
+			} else if (!emp.isComplete()) {
 				item_btn.setChecked(true);
 				item_btn.setEnabled(false);
+			}
+			if (emp.canComplete == 1) {
+				item_btn.setEnabled(true);
 			} else {
 				item_btn.setEnabled(false);
-				//check_item.setEnabled(false);
 			}
-			item_btn.setOnClickListener( new View.OnClickListener(){
-				public void onClick(View v) {  
-					ToggleButton cb = (ToggleButton) v ;
-					 reminderData remind=(reminderData)cb.getTag();
-					 int index=myArray.indexOf(remind);
-					 Log.d("remiderData",Integer.toString(index)+" "+remind.toString());
-					 if(cb.isChecked()){
-						 remind.setStatus(1);
-						 cb.setEnabled(false);
-					 }else{
-						 remind.setStatus(0);
-					 }	
-					 myArray.set(index, remind);
-					 
-					 		
+			item_btn.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					CheckBox cb = (CheckBox) v;
+					reminderData remind = (reminderData) cb.getTag();
+					int index = myArray.indexOf(remind);
+					Log.d("remiderData",
+							Integer.toString(index) + " " + remind.toString());
+
+					if (cb.isChecked()) {
+						boolean flag = ServerUtilities.complete(remind,
+								ListView_Reminder.user.user_id);
+						if (flag) {
+							cb.setEnabled(false);
+							myArray.remove(remind);	
+							//this.notifyAll();
+						}
+					} else {
+						remind.setStatus(0);
+					}				
+
 				}
 			});
 			final TextView txt_content = (TextView) convertView
@@ -90,7 +96,5 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 		return convertView;// trả về View này, tức là trả luôn
 							// về các thông số mới mà ta vừa thay đổi
 	}
-	
-	
-	
+
 }

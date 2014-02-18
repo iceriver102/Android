@@ -9,7 +9,8 @@ import android.util.Log;
 public final class CommonUtilities {
 	
 	// give your server registration url here
-	public static final String SERVER_URL = "http://bmsled.altamedia.vn/demo/api.php";
+	//public static final String SERVER_URL = "http://bmsled.altamedia.vn/demo/api.php";
+	public static final String SERVER_URL = "http://bms.altamedia.vn/api.php";
 
 	// Google project id
 	public static final String SENDER_ID = "737164671250";

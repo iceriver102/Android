@@ -17,9 +17,16 @@ public final class R {
         public static final int NiceButtonDisabledStartColor=0x7f040003;
         public static final int NiceButtonEndColor=0x7f040001;
         public static final int NiceButtonStartColor=0x7f040000;
+        public static final int black=0x7f04000d;
+        public static final int blue=0x7f04000e;
         public static final int color_black=0x7f040007;
         public static final int color_orange=0x7f040008;
         public static final int color_white=0x7f040006;
+        public static final int custom_theme_color=0x7f040009;
+        public static final int gray=0x7f04000b;
+        public static final int lite_gray=0x7f04000c;
+        public static final int white=0x7f04000a;
+        public static final int yellow=0x7f04000f;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -33,26 +40,34 @@ public final class R {
     }
     public static final class drawable {
         public static final int background_login=0x7f020000;
-        public static final int background_title=0x7f020001;
+        public static final int dropshadow=0x7f020001;
         public static final int gradient_background=0x7f020002;
         public static final int gradient_bg=0x7f020003;
         public static final int gradient_bg_hover=0x7f020004;
         public static final int ic_action_calendar=0x7f020005;
-        public static final int ic_action_time=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int list_selector=0x7f020008;
-        public static final int logo=0x7f020009;
-        public static final int min_logo=0x7f02000a;
-        public static final int nice_button=0x7f02000b;
+        public static final int ic_action_refresh=0x7f020006;
+        public static final int ic_action_time=0x7f020007;
+        public static final int ic_action_undo=0x7f020008;
+        public static final int ic_launcher=0x7f020009;
+        public static final int ic_log_out=0x7f02000a;
+        public static final int list_bg=0x7f02000b;
+        public static final int list_selector=0x7f02000c;
+        public static final int logo=0x7f02000d;
+        public static final int min_logo=0x7f02000e;
+        public static final int nav_shadow=0x7f02000f;
+        public static final int nice_button=0x7f020010;
+        public static final int title_background=0x7f020011;
+        public static final int title_shadow=0x7f020012;
     }
     public static final class id {
-        public static final int ListReminder=0x7f09000f;
-        public static final int action_settings=0x7f090010;
-        public static final int btn_logOut=0x7f09000e;
+        public static final int ListReminder=0x7f090010;
+        public static final int action_settings=0x7f090011;
+        public static final int btn_logOut=0x7f09000f;
+        public static final int btn_refesh=0x7f09000e;
         public static final int btnlogin=0x7f090004;
-        public static final int imageView1=0x7f090008;
         public static final int img=0x7f09000c;
         public static final int imgLogo=0x7f090000;
+        public static final int item_img_date=0x7f090008;
         public static final int item_toggleBtn=0x7f090005;
         public static final int item_txtContent=0x7f090007;
         public static final int item_txtTitle=0x7f090006;
@@ -82,11 +97,13 @@ public final class R {
         public static final int app_name=0x7f060004;
         public static final int btn_login=0x7f060009;
         public static final int btn_logout=0x7f06000a;
+        public static final int confirm_logout=0x7f06000f;
         public static final int content_logo_img=0x7f06000e;
         public static final int http_url=0x7f06000d;
         public static final int name_company=0x7f060006;
         public static final int place_user_name=0x7f06000b;
         public static final int place_user_pass=0x7f06000c;
+        public static final int title_dialog_logout=0x7f060010;
         public static final int user_name=0x7f060007;
         public static final int user_pass=0x7f060008;
     }
@@ -117,5 +134,8 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int CustomTheme=0x7f070002;
+        public static final int ListStyle=0x7f070004;
+        public static final int WindowTitleBackground=0x7f070003;
     }
 }

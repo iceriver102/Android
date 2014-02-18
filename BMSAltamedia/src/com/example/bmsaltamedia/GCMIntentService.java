@@ -23,6 +23,7 @@ import com.google.android.gcm.GCMBaseIntentService;
 
 public class GCMIntentService extends GCMBaseIntentService {
 	private static final String TAG = "GCMIntentService";
+	public static boolean flag=false;
 
 	public GCMIntentService() {
 		super(SENDER_ID);
@@ -52,12 +53,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		String message = intent.getExtras().getString("message");
 		String action = intent.getExtras().getString("action");
-		if (CommonUtilities.flag_login) {
-			Log.i(TAG, "Received message");
-			// Log.i(TAG, intent.getStringExtra("msg"));
-			// displayMessage(context, message, action);			
-			Log.i(TAG, message);
-			// notifies user
+		if (flag) {
+			Log.i(TAG, "Received message["+message+"]");		
 			generateNotification(context, action, message);
 		} else {
 			Log.e(TAG, "Received message cancel msg["+message+"]");

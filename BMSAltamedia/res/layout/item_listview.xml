@@ -5,19 +5,16 @@
     android:orientation="horizontal"
     android:padding="5dip" 
     android:background="@drawable/list_selector">
-
-    <ToggleButton
+    <CheckBox
         android:id="@+id/item_toggleBtn"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content" 
-        android:layout_gravity="center_vertical"       
-        android:textOn="Hoàn thành"
-    	android:textOff="Đang chờ" 
-    	android:layout_marginLeft="12dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_gravity="center_vertical"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="85dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
         android:baselineAligned="@color/color_orange"
@@ -29,8 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text=""
-            android:textColor="@color/color_black"
+            android:textColor="@color/color_orange"
             android:layout_marginTop="3dp"
+            android:textStyle="bold"
             android:textSize="20sp" />
         <TextView
             android:id="@+id/item_txtContent"
@@ -40,7 +38,7 @@
             android:textStyle="italic"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,19 +48,20 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="1dp" >
                 <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_calendar" />
-
+                    android:id="@+id/item_img_date"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_action_calendar"
+                    android:layout_gravity="center_vertical" />
                 <TextView
                     android:id="@+id/item_txt_Date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="3dp"
                     android:gravity="center_vertical"
+                    android:textColor="@color/color_orange"
                     android:text=""
-                    android:textSize="13sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

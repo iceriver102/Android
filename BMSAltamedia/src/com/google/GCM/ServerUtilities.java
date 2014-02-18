@@ -14,11 +14,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.webkit.WebView.FindListener;
 
+import com.example.appData.reminderData;
+import com.example.appData.userData;
 import com.example.http.RequestTask;
 //import com.altamedia.androidgcm.R;
 import com.google.android.gcm.GCMRegistrar;
@@ -27,19 +31,14 @@ public class ServerUtilities {
 	private static final int MAX_ATTEMPTS = 5;
 	private static final int BACKOFF_MILLI_SECONDS = 2000;
 	private static final Random random = new Random();
+	public static final String FIELD_RESULT="result";
 	
 	public static String login(String user,String pass,String regID){
-		Log.i(TAG,"login device "+regID);
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("mod", "ALTA_LOGIN");
-		params.put("regID", regID);
-		params.put("user", user);
-		params.put("pass", pass);
-		Log.i(TAG,params.toString());
+		Log.i(TAG,"login device "+regID);		
 		String serverUrl = SERVER_URL;		
 		try{
-			String url=serverUrl+ "?mod=ALTA_LOGIN&user=" + user + "&pass="
-					+ pass + "&regID="+regID;
+			String url=serverUrl+ "?mod=login_reminder&device=android&username=" + user + "&password="
+					+ pass + "&token="+regID;
 			AsyncTask<String, String, String> jsonString = new RequestTask().execute(url);
 			Log.i(TAG,"Json: "+ jsonString.get());
 			return jsonString.get();
@@ -48,6 +47,62 @@ public class ServerUtilities {
 			return "";
 		}
 		
+	}
+	public static boolean logOut(int user_id,String regID){
+		
+		Log.i(TAG,"logOut device "+regID);		
+		String serverUrl = SERVER_URL;		
+		try{
+			String url=serverUrl+ "?mod=logout_reminder&user_id=" + user_id + "&token="+regID;
+			AsyncTask<String, String, String> jsonString = new RequestTask().execute(url);
+			Log.i(TAG,"Json: "+ jsonString.get());
+			JSONObject json = new JSONObject(jsonString.get());
+			Log.i(TAG,jsonString.get());	
+			return json.getBoolean(FIELD_RESULT);
+		}catch(Exception ex){
+			Log.e(TAG,"không thể logOut");
+			return false;
+		}
+	}
+	
+	public static String getRemindData(int user_id){
+		Log.i(TAG,"get Reminder");		
+		String serverUrl = SERVER_URL;
+		try{
+			String url=serverUrl+ "?mod=get_reminder&user_id=" + user_id;
+			AsyncTask<String, String, String> jsonString = new RequestTask().execute(url);
+			return jsonString.get();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}	
+	}
+	public static boolean complete(reminderData remind,int user_id){
+		/*http://bms.altamedia.vn/api.php?mod=reminder_action
+
+			user_id
+			id
+			type : task/project (lấy từ get_reminder)
+			action : complete
+
+			return
+			{
+				result : true/false
+				msg : 
+			}*/
+		
+		String serverUrl = SERVER_URL;
+		try{
+			String url=serverUrl+ "?mod=reminder_action&action=complete&user_id=" + user_id+"&id="+remind.getID()+"&type="+remind.getType();
+			AsyncTask<String, String, String> jsonString = new RequestTask().execute(url);
+			Log.i(TAG,"Json: "+ jsonString.get());
+			JSONObject json = new JSONObject(jsonString.get());
+			Log.i(TAG,jsonString.get());	
+			return json.getBoolean(FIELD_RESULT);
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}	
 	}
 
 	/**

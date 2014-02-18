@@ -54,8 +54,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		GCMRegistrar.checkDevice(this);
 		// Make sure the manifest was properly set - comment out this line
 		// while developing the app, then uncomment it when it's ready.
-		// GCMRegistrar.checkManifest(this);
-		
+		//GCMRegistrar.checkManifest(this);		
 		
 		registerReceiver(mHandleMessageReceiver, new IntentFilter(
 				DISPLAY_MESSAGE_ACTION));
@@ -64,18 +63,18 @@ public class MainActivity extends Activity implements OnClickListener {
 			GCMRegistrar.register(this, SENDER_ID);
 			regId = GCMRegistrar.getRegistrationId(this);
 			
-		} /*else {
-			// Device is already registered on GCM
+		}else{
 			if (GCMRegistrar.isRegisteredOnServer(this)) {
 				// Skips registration.
+				Toast.makeText(getApplicationContext(),
+						"Already registered with GCM", Toast.LENGTH_LONG)
+						.show();
 				Log.i("Main", "Already registered with GCM");
-				Log.i("Reg Id",regId);
 			} else {
 				// Try to register again, but not in the UI thread.
 				// It's also necessary to cancel the thread onDestroy(),
 				// hence the use of AsyncTask instead of a raw thread.
 				final Context context = this;
-				Log.i("Reg Id",regId);
 				mRegisterTask = new AsyncTask<Void, Void, Void>() {
 					@Override
 					protected Void doInBackground(Void... params) {
@@ -84,6 +83,7 @@ public class MainActivity extends Activity implements OnClickListener {
 						ServerUtilities.register(context, "demo", "demo", regId);
 						return null;
 					}
+
 					@Override
 					protected void onPostExecute(Void result) {
 						mRegisterTask = null;
@@ -91,17 +91,13 @@ public class MainActivity extends Activity implements OnClickListener {
 
 				};
 				mRegisterTask.execute(null, null, null);
-				
 			}
-			
-		}*/		
-		
-		//Toast.makeText(this, regId, Toast.LENGTH_LONG).show();
+		}
 		final Button btn_login = (Button) findViewById(R.id.btnlogin);
 		btn_login.setOnClickListener(this);
 		mEdit_User = (EditText) findViewById(R.id.txtUser);
 		mEdit_Pass = (EditText) findViewById(R.id.txtPass);		
-		CommonUtilities.flag_login=false;		
+		GCMIntentService.flag=CommonUtilities.flag_login=false;		
 	}
 
 	@Override
@@ -122,8 +118,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				Log.e("validate", "mật khẩu rỗng");
 				Toast.makeText(this, this.getText(R.string.Err_validate_password), Toast.LENGTH_LONG).show();
 				return;
-			}
-			
+			}			
 			
 			if (regId.equals("")) {
 				GCMRegistrar.register(this, SENDER_ID);
@@ -141,9 +136,10 @@ public class MainActivity extends Activity implements OnClickListener {
 					MySQLiteHelper db= new MySQLiteHelper(this);
 					db.addUser(userJson);
 					Log.i("dang nhap",userJson.toString());
-					CommonUtilities.flag_login=true;
+					GCMIntentService.flag=CommonUtilities.flag_login=true;
 					Intent i = new Intent(MainActivity.this, ListView_Reminder.class);
 					startActivity(i);	
+					ListView_Reminder.regID=regId;
 					this.finish();
 				}else{
 					Toast.makeText(this, this.getString(R.string.Err_login), Toast.LENGTH_LONG).show();
