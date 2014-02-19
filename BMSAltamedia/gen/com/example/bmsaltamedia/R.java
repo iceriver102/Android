@@ -18,15 +18,16 @@ public final class R {
         public static final int NiceButtonEndColor=0x7f040001;
         public static final int NiceButtonStartColor=0x7f040000;
         public static final int black=0x7f04000d;
-        public static final int blue=0x7f04000e;
+        public static final int blue=0x7f04000f;
         public static final int color_black=0x7f040007;
         public static final int color_orange=0x7f040008;
         public static final int color_white=0x7f040006;
         public static final int custom_theme_color=0x7f040009;
         public static final int gray=0x7f04000b;
         public static final int lite_gray=0x7f04000c;
+        public static final int transparent=0x7f04000e;
         public static final int white=0x7f04000a;
-        public static final int yellow=0x7f04000f;
+        public static final int yellow=0x7f040010;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -39,44 +40,39 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int background_login=0x7f020000;
-        public static final int dropshadow=0x7f020001;
-        public static final int gradient_background=0x7f020002;
-        public static final int gradient_bg=0x7f020003;
-        public static final int gradient_bg_hover=0x7f020004;
-        public static final int ic_action_calendar=0x7f020005;
+        public static final int btn_login_background=0x7f020000;
+        public static final int checkbox_checked_bg=0x7f020001;
+        public static final int checkbox_disable_bg=0x7f020002;
+        public static final int checkbox_selector=0x7f020003;
+        public static final int checkbox_uncheck_bg=0x7f020004;
+        public static final int gradient_background=0x7f020005;
         public static final int ic_action_refresh=0x7f020006;
-        public static final int ic_action_time=0x7f020007;
-        public static final int ic_action_undo=0x7f020008;
-        public static final int ic_launcher=0x7f020009;
-        public static final int ic_log_out=0x7f02000a;
-        public static final int list_bg=0x7f02000b;
-        public static final int list_selector=0x7f02000c;
-        public static final int logo=0x7f02000d;
-        public static final int min_logo=0x7f02000e;
-        public static final int nav_shadow=0x7f02000f;
-        public static final int nice_button=0x7f020010;
-        public static final int title_background=0x7f020011;
-        public static final int title_shadow=0x7f020012;
+        public static final int ic_action_undo=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int ic_log_out=0x7f020009;
+        public static final int item_listview_background=0x7f02000a;
+        public static final int logo=0x7f02000b;
+        public static final int nav_shadow=0x7f02000c;
+        public static final int title_backgound=0x7f02000d;
+        public static final int txt_pass_backdground=0x7f02000e;
+        public static final int txt_user_background=0x7f02000f;
     }
     public static final class id {
-        public static final int ListReminder=0x7f090010;
-        public static final int action_settings=0x7f090011;
-        public static final int btn_logOut=0x7f09000f;
-        public static final int btn_refesh=0x7f09000e;
+        public static final int ListReminder=0x7f09000e;
+        public static final int action_settings=0x7f09000f;
+        public static final int btn_logOut=0x7f09000d;
+        public static final int btn_refesh=0x7f09000c;
         public static final int btnlogin=0x7f090004;
-        public static final int img=0x7f09000c;
         public static final int imgLogo=0x7f090000;
-        public static final int item_img_date=0x7f090008;
-        public static final int item_toggleBtn=0x7f090005;
-        public static final int item_txtContent=0x7f090007;
-        public static final int item_txtTitle=0x7f090006;
+        public static final int item_checkBox=0x7f090006;
+        public static final int item_txtContent=0x7f090008;
+        public static final int item_txtTitle=0x7f090007;
         public static final int item_txt_Date=0x7f090009;
         public static final int layoutInput=0x7f090001;
-        public static final int layoutLeft=0x7f09000b;
         public static final int layoutMain=0x7f09000a;
+        public static final int textView1=0x7f090005;
         public static final int txtPass=0x7f090003;
-        public static final int txtTitle=0x7f09000d;
+        public static final int txtTitle=0x7f09000b;
         public static final int txtUser=0x7f090002;
     }
     public static final class layout {
@@ -109,6 +105,7 @@ public final class R {
         public static final int title_dialog_logout=0x7f060012;
         public static final int user_name=0x7f060009;
         public static final int user_pass=0x7f06000a;
+        public static final int work_wait_title=0x7f060014;
     }
     public static final class style {
         /** 

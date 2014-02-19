@@ -46,21 +46,19 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 			txtdisplay.setText(emp.title);
 
 			final CheckBox item_btn = (CheckBox) convertView
-					.findViewById(R.id.item_toggleBtn);
+					.findViewById(R.id.item_checkBox);
 
 			item_btn.setTag(emp);
 			if (!emp.isComplete()) {
 				item_btn.setChecked(false);
-
-			} else if (!emp.isComplete()) {
+			} else {
 				item_btn.setChecked(true);
-				item_btn.setEnabled(false);
 			}
 			if (emp.canComplete == 1) {
 				item_btn.setEnabled(true);
 			} else {
 				item_btn.setEnabled(false);
-			}
+			}			
 			item_btn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					CheckBox cb = (CheckBox) v;
@@ -72,14 +70,21 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 					if (cb.isChecked()) {
 						boolean flag = ServerUtilities.complete(remind,
 								ListView_Reminder.user.user_id);
+						Log.d("flag",flag+"");
 						if (flag) {
-							cb.setEnabled(false);
-							myArray.remove(remind);
+							remind.complete();
+							
+							myArray.set(index, remind);
+							
+							//myArray.remove(remind);
 							notifyDataSetChanged();
-						}else{
+							cb.setEnabled(false);
+						}else if(ServerUtilities.Err!=""){
 							cb.setChecked(false);
 							Toast.makeText(v.getContext(), v.getContext().getString(R.string.Err_complete), Toast.LENGTH_LONG).show();
-							Log.i("complete", "khong the complete");
+							Log.e("complete", ServerUtilities.Err);
+						}else{
+							Log.e("complete", "khong the complete");
 						}
 					} else {
 						remind.setStatus(0);

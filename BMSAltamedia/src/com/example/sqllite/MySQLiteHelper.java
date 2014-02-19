@@ -1,11 +1,14 @@
 package com.example.sqllite;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
 import com.example.Json.userDataJson;
+import com.example.appData.reminderData;
 import com.example.appData.userData;
-
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -28,40 +31,44 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// SQL statement to create book table
 		String CREATE_USER_TABLE = "CREATE TABLE user ( "
-				+ "id INTEGER PRIMARY KEY AUTOINCREMENT, "+"user_id TEXT, " + "user TEXT, "
-				+ "fullName TEXT, " + "pass TEXT, "
+				+ "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "user_id TEXT, "
+				+ "user TEXT, " + "fullName TEXT, " + "pass TEXT, "
 				+ "Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP )";
 		// create books table
 		db.execSQL(CREATE_USER_TABLE);
+
+		String CREATE_REMIND_TABLE = "CREATE TABLE REMIBDER ( "
+				+ "ID INTEGER PRIMARY KEY AUTOINCREMENT, " + "msg_id TEXT, "
+				+ "title TEXT, " + "content TEXT, " + "type TEXT, "
+				+ "status TINYINT," + "canComplete TINYINT,"
+				+ "date DATETIME DEFAULT CURRENT_TIMESTAMP )";
+		db.execSQL(CREATE_REMIND_TABLE);
+
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Drop older books table if existed
 		db.execSQL("DROP TABLE IF EXISTS user");
+		db.execSQL("DROP TABLE IF EXISTS REMIBDER");
 		this.onCreate(db);
 	}
 
 	// ---------------------------------------------------------------------
-
-	/**
-	 * CRUD operations (create "add", read "get", update, delete) book + get all
-	 * books + delete all books
-	 */
 
 	// Books table name
 	private static final String TABLE_USER = "user";
 
 	// Books Table Columns names
 	private static final String KEY_ID = "id";
-	private static final String KEY_USER_ID="user_id";
+	private static final String KEY_USER_ID = "user_id";
 	private static final String KEY_USER = "user";
 	private static final String KEY_PASS = "pass";
 	private static final String KEY_FULLNAME = "fullName";
 	private static final String KEY_TIME = "Timestamp";
 
-	private static final String[] COLUMNS = { KEY_ID,KEY_USER_ID,KEY_USER, KEY_FULLNAME,
-			KEY_PASS, KEY_TIME };
+	private static final String[] COLUMNS = { KEY_ID, KEY_USER_ID, KEY_USER,
+			KEY_FULLNAME, KEY_PASS, KEY_TIME };
 
 	public void addUser(userDataJson user) {
 		Log.d("addBook", user.toString());
@@ -86,7 +93,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 
 	public void addUser(userData user) {
-		Log.d("addBook", user.toString());
+		Log.d("addUser", user.toString());
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -105,15 +112,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		// 4. close
 		db.close();
 	}
-	public void emptyUser(){
-		SQLiteDatabase db= this.getWritableDatabase();
-        db.delete(TABLE_USER, null, null);
+
+	public void emptyUser() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_USER, null, null);
 	}
 
 	public int countUser() {
 		int num = 0;
 		try {
-			String query = "SELECT  count(*) as num FROM " + TABLE_USER;			
+			String query = "SELECT  count(*) as num FROM " + TABLE_USER;
 			SQLiteDatabase db = this.getWritableDatabase();
 			Cursor cursor = db.rawQuery(query, null);
 			cursor.moveToFirst();
@@ -146,14 +154,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		// 4. build book object
 		userData user = new userData();
 		user.setId(Integer.parseInt(cursor.getString(0)));
-		user.user_id=Integer.parseInt(cursor.getString(1));
+		user.user_id = Integer.parseInt(cursor.getString(1));
 		user.setUserName(cursor.getString(2));
 		user.fullName = cursor.getString(3);
 		user.setPass(cursor.getString(4));
-		user.setDate(cursor.getString(5),"dd/MM/yyyy");
-		
-		Log.d("getUser(" + id + ")", user.toString());
+		user.setDate(cursor.getString(5), "dd/MM/yyyy");
 
+		Log.d("getUser(" + id + ")", user.toString());
+		db.close();
 		// 5. return book
 		return user;
 	}
@@ -175,12 +183,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			do {
 				user = new userData();
 				user.setId(Integer.parseInt(cursor.getString(0)));
-				user.user_id=Integer.parseInt(cursor.getString(1));
+				user.user_id = Integer.parseInt(cursor.getString(1));
 				user.setUserName(cursor.getString(2));
 				user.fullName = cursor.getString(3);
 				user.setPass(cursor.getString(4));
-				user.setDate(cursor.getString(5),"yyyy-MM-dd hh:mm:ss");
-				Log.d("getUer("+user.user_id+")", user.toString());
+				user.setDate(cursor.getString(5), "yyyy-MM-dd hh:mm:ss");
+				Log.d("getUer(" + user.user_id + ")", user.toString());
 
 				// Add book to books
 				list_user.add(user);
@@ -188,7 +196,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		}
 
 		Log.d("getAllUsers()", list_user.toString());
-
+		db.close();
 		// return books
 		return list_user;
 	}
@@ -230,4 +238,166 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		Log.d("deleteUser", user.toString());
 
 	}
+
+	// table REMINDER
+
+	// Books table name
+	private static final String TABLE_REMINDER = "REMIBDER";
+
+	// Books Table Columns names
+	private static final String KEY_ID_REMINDER = "ID";
+	private static final String KEY_MSG_ID_REMINDER = "msg_id";
+	private static final String KEY_TITLE_REMINDER = "title";
+	private static final String KEY_CONTENT_REMINDER = "content";
+	private static final String KEY_STATUS_REMINDER = "status";
+	private static final String KEY_DATE_REMINDER = "date";
+	private static final String KEY_TYPE_REMINDER = "type";
+	private static final String KEY_CAN_COMPLETE_REMINDER = "canComplete";
+
+	private static final String[] COLUMNS_REMINDER = { KEY_ID_REMINDER,
+			KEY_MSG_ID_REMINDER, KEY_TITLE_REMINDER, KEY_CONTENT_REMINDER,
+			KEY_TYPE_REMINDER, KEY_STATUS_REMINDER, KEY_CAN_COMPLETE_REMINDER,
+			KEY_DATE_REMINDER };
+
+	public void addReminder(reminderData remind) {
+		Log.d("addREMINDER", remind.toString());
+		// 1. get reference to writable DB
+		SQLiteDatabase db = this.getWritableDatabase();
+		// 2. create ContentValues to add key "column"/value
+		ContentValues values = new ContentValues();
+
+		values.put(KEY_MSG_ID_REMINDER, remind.getID());
+		values.put(KEY_TITLE_REMINDER, remind.title);
+		values.put(KEY_CONTENT_REMINDER, remind.content);
+		values.put(KEY_TYPE_REMINDER, remind.getType());
+		values.put(KEY_STATUS_REMINDER, remind.isComplete());
+		values.put(KEY_CAN_COMPLETE_REMINDER, remind.canComplete);
+		values.put(KEY_DATE_REMINDER, remind.getDate("yyyy-MM-dd hh:mm:ss"));
+		db.insert(TABLE_REMINDER, null, values);
+		db.close();
+	}
+
+	public reminderData getReminder(int id) {
+
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		// 2. build query
+		Cursor cursor = db.query(TABLE_REMINDER, // a. table
+				COLUMNS_REMINDER, // b. column names
+				" ID = ?", // c. selections
+				new String[] { String.valueOf(id) }, // d. selections args
+				null, // e. group by
+				null, // f. having
+				null, // g. order by
+				null); // h. limit
+		if (cursor != null)
+			cursor.moveToFirst();
+		reminderData tmp = new reminderData(cursor.getInt(5));
+		tmp.setID(cursor.getInt(1));
+		tmp.title = cursor.getString(2);
+		tmp.content = cursor.getString(3);
+		tmp.setType(cursor.getString(4));
+		tmp.setDate(cursor.getString(7), "yyyy-MM-dd hh:mm:ss");
+		tmp.canComplete = cursor.getInt(6);
+		tmp.sql_id = cursor.getInt(0);
+		Log.d("getREMIND(" + id + ")", tmp.toString());
+		db.close();
+		return tmp;
+	}
+
+	public List<reminderData> getAllReminder() {
+		List<reminderData> listReminder = new LinkedList<reminderData>();
+
+		// 1. build the query
+		String query = "SELECT  * FROM " + TABLE_REMINDER;
+
+		// 2. get reference to writable DB
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(query, null);
+
+		// 3. go over each row, build book and add it to list
+
+		if (cursor.moveToFirst()) {
+			do {
+				reminderData tmp = new reminderData(cursor.getInt(5));
+				tmp.setID(cursor.getInt(1));
+				tmp.title = cursor.getString(2);
+				tmp.content = cursor.getString(3);
+				tmp.setType(cursor.getString(4));
+				tmp.setDate(cursor.getString(7), "yyyy-MM-dd hh:mm:ss");
+				tmp.canComplete = cursor.getInt(6);
+				tmp.sql_id = cursor.getInt(0);
+				Log.d("getREMIND(" + tmp.getID() + ")", tmp.toString());
+
+				// Add book to books
+				listReminder.add(tmp);
+			} while (cursor.moveToNext());
+		}
+
+		Log.d("getAllUsers()", listReminder.toString());
+		db.close();
+
+		return listReminder;
+
+	}
+
+	public int updateReminder(reminderData remind) {
+
+		// 1. get reference to writable DB
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		// 2. create ContentValues to add key "column"/value
+		ContentValues values = new ContentValues();
+		if (remind.isComplete()) {
+			values.put(KEY_STATUS_REMINDER, 1);
+			values.put(KEY_CAN_COMPLETE_REMINDER, 0);
+		} else {
+			values.put(KEY_STATUS_REMINDER, 0);
+		}
+
+		// 3. updating row
+		int i = db.update(TABLE_REMINDER, // table
+				values, // column/value
+				KEY_ID_REMINDER + " = ?", // selections
+				new String[] { String.valueOf(remind.sql_id) }); // selection
+																	// args
+
+		// 4. close
+		db.close();
+		return i;
+	}
+
+	public void deleteReminder(int id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_REMINDER, KEY_ID_REMINDER + " = ?",
+				new String[] { String.valueOf(id) });
+		db.close();
+		Log.d("deleteUser", "delete user id " + id);
+	}
+
+	public void emptyReminder() {
+		Log.e("Mysql", "empty reminder");
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_REMINDER, null, null);
+	}
+
+	@SuppressLint("SimpleDateFormat")
+	public int CountReminder(Date date) {
+		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+		String dateStr = formatter.format(date);
+		
+		int num = 0;
+		List<reminderData> listReminder = getAllReminder();
+		int size = listReminder.size();
+		for (int i = 0; i < size; i++) {
+			reminderData tmp = listReminder.get(i);
+			Log.e("skfhl",tmp.getDate("dd/MM/yyyy")+"<->"+dateStr);
+			if (tmp.getDate("dd/MM/yyyy").equals(dateStr)) {
+				num++;
+			}
+		}
+		Log.e("num",""+num);
+		return num;
+	}
+
 }

@@ -14,6 +14,7 @@
 	<color name="gray">#666666</color>
 	<color name="lite_gray">#d0cece</color>
 	<color name="black">#151515</color>
+	<color name="transparent">#00000000</color>
 	<color name="blue">#3399cc</color>
 	<color name="yellow">#f2ec3e</color>
 </resources>

@@ -73,7 +73,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				protected Void doInBackground(Void... params) {
 					// Register on our server
 					// On server creates a new user
-					ServerUtilities.register(context, "", "", regId);
+					//ServerUtilities.register(context, "", "", regId);
 					return null;
 				}
 

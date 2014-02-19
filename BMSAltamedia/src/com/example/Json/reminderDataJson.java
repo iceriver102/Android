@@ -35,32 +35,46 @@ public class reminderDataJson {
 				this.id = json.getInt(FIELD_ID);
 				this.title = json.getString(FIELD_TITLE);
 				this.content = json.getString(FIELD_CONTENT);
-				this.canComlete = json.getInt(FIELD_STATUS);
+				if (json.getInt(FIELD_STATUS) == 1)
+					this.canComlete = 1;
+				else {
+					this.canComlete = 0;
+				}
 				this.setTime(json.getString(FIELD_TIME), "dd/MM/yyyy");
-				this.type=json.getString(FIELD_TYPE);
-				this.status = false;
+				this.type = json.getString(FIELD_TYPE);
+				if (json.getInt(FIELD_STATUS) == 2)
+					this.status = true;
+				else
+					this.status = false;
 			} catch (Exception ex) {
 				Log.e("REMINDER", "không thể khởi tạo[" + jsonString + "]");
 			}
-			Log.d("REMINDER",this.toString());
-			Log.d("JSON",jsonString);
+			Log.d("REMINDER", this.toString());
+			Log.d("JSON", jsonString);
 		}
 	}
 
 	public reminderDataJson(JSONObject json) {
 		try {
 			//
-			this.id = Integer.parseInt(json.getString(FIELD_ID));
+			this.id = json.getInt(FIELD_ID);
 			this.title = json.getString(FIELD_TITLE);
 			this.content = json.getString(FIELD_CONTENT);
-			this.canComlete = json.getInt(FIELD_STATUS);
+			if (json.getInt(FIELD_STATUS) == 1)
+				this.canComlete = 1;
+			else {
+				this.canComlete = 0;
+			}
 			this.setTime(json.getString(FIELD_TIME), "dd/MM/yyyy");
-			this.type=json.getString(FIELD_TYPE);
-			this.status = false;
+			this.type = json.getString(FIELD_TYPE);
+			if (json.getInt(FIELD_STATUS) == 2)
+				this.status = true;
+			else
+				this.status = false;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		Log.d("REMINDER",this.toString());
+		Log.d("REMINDER", this.toString());
 	}
 
 	public reminderDataJson() {
@@ -97,9 +111,11 @@ public class reminderDataJson {
 	public reminderData convertReminder() {
 		return new reminderData(this);
 	}
+
 	@Override
-	public String toString(){
-		return "REMINDER [id:"+this.id+", title:"+this.title+", content:"+this.content+", type:"+this.type+"]";
+	public String toString() {
+		return "REMINDER [id:" + this.id + ", title:" + this.title
+				+ ", content:" + this.content + ", type:" + this.type + "]";
 	}
 
 }

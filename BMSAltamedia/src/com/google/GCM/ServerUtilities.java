@@ -30,10 +30,9 @@ public class ServerUtilities {
 	private static final Random random = new Random();
 	public static final String FIELD_RESULT = "result";
 	public static String Err = "";
-	public static boolean network_check;
+	public static boolean network_check=true;
 
 	public static String login(String user, String pass, String regID) {
-
 		Log.i(TAG, "login device " + regID);
 		if (network_check) {
 			String serverUrl = SERVER_URL;

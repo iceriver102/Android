@@ -6,6 +6,9 @@ import static com.google.GCM.CommonUtilities.displayMessage;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -15,15 +18,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.Json.reminderDataJson;
+import com.example.appData.reminderData;
 import com.example.bmsaltamedia.MainActivity;
 import com.example.bmsaltamedia.R;
+import com.example.sqllite.MySQLiteHelper;
 import com.google.GCM.CommonUtilities;
 import com.google.GCM.ServerUtilities;
+import com.google.GCM.dataAppSave;
 import com.google.android.gcm.GCMBaseIntentService;
 
 public class GCMIntentService extends GCMBaseIntentService {
 	private static final String TAG = "GCMIntentService";
-	public static boolean flag=false;
+	public static boolean flag;
+	public static final String DISPLAY_MESSAGE_ACTION = "com.altamedia.androidgcm.DISPLAY_MESSAGE";
 
 	public GCMIntentService() {
 		super(SENDER_ID);
@@ -53,11 +61,17 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		String message = intent.getExtras().getString("message");
 		String action = intent.getExtras().getString("action");
+		flag = (Integer.parseInt(dataAppSave.loadSavedPreferences(context,
+				"login")) == 1);
+		Log.d("apdata", dataAppSave.loadSavedPreferences(context, "login"));
 		if (flag) {
-			Log.i(TAG, "Received message["+message+"]");		
+			Log.i(TAG, "Received message[" + message + "]");
+			reLoadLayout(context);
 			generateNotification(context, action, message);
+
 		} else {
-			Log.e(TAG, "Received message cancel msg["+message+"]");
+			Log.e(TAG, "Received message cancel msg[" + message + "]");
+			// generateNotification(context, action, message);
 		}
 	}
 
@@ -73,8 +87,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * */
 	public void onError(Context context, String errorId) {
 		Log.i(TAG, "Received error: " + errorId);
-		// displayMessage(context, context.getString(R.string.gcm_error,
-		// errorId),"");
+
 	}
 
 	protected boolean onRecoverableError(Context context, String errorId) {
@@ -89,6 +102,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	private void generateNotification(Context context, String action,
 			String message) {
+
 		int icon = R.drawable.ic_launcher;
 		long when = System.currentTimeMillis();
 		NotificationManager notificationManager = (NotificationManager) context
@@ -97,15 +111,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 		//
 		String title = context.getString(R.string.app_name);
 		Intent intent = null;
-		if (action.equals("1")) {
-			intent = new Intent(context, MainActivity.class);
-			intent.putExtra("message", message);
-		} else if (action.equals("2")) {
-		} else if (action.equals("3")) {
-		} else if (action.equals("4")) {
-		} else if (action.equals("5")) {
-		} else if (action.equals("6")) {
-		}
+
+		intent = new Intent(context, SplashScreen.class);
+		intent.putExtra("message", message);
+
 		// set intent so it does not start a new activity
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -128,8 +137,50 @@ public class GCMIntentService extends GCMBaseIntentService {
 								.getPackageName())) {
 			// App is not in the foreground
 			notificationManager.notify(0, notification);
+			httpGetData(context);
 		}
+	}
 
+	public static void reLoadLayout(Context context) {
+		Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
+		Log.i(TAG, "reload data");
+		context.sendBroadcast(intent);
+	}
+
+	public void httpGetData(Context context) {
+		// Log.e("static","save data base");
+		int userid = Integer.parseInt(dataAppSave.loadSavedPreferences(context,
+				"user_id"));
+		String jsonStr = ServerUtilities.getRemindData(userid);
+		Log.e("Json", " "+jsonStr);
+		MySQLiteHelper db = new MySQLiteHelper(context);
+		
+		if (jsonStr != null) {
+			try {
+				db.emptyReminder();
+				JSONObject jsonObj = new JSONObject(jsonStr);
+				JSONArray reminders = jsonObj.getJSONArray("reminders");
+				int length = reminders.length();
+				if (length > 0) {
+					for (int i = 0; i < length; i++) {
+						try {
+							JSONObject item = reminders.getJSONObject(i);
+							reminderData tmpReminder = new reminderData(
+									new reminderDataJson(item));
+							db.addReminder(tmpReminder);
+							// Log.i("Reminder", tmpReminder.toString());
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				} else {
+
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	private boolean isAppForground() {

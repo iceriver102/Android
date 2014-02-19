@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.example.data.Validate"/>
-<fullyQualifiedTypeName name="com.example.http.GCMIntentService"/>
-<fullyQualifiedTypeName name="android.R"/>
-<fullyQualifiedTypeName name="android.R.string"/>
 <fullyQualifiedTypeName name="android.webkit.WebView.FindListener"/>
 <fullyQualifiedTypeName name="com.google.GCM.ConnectionDetector"/>
 <fullyQualifiedTypeName name="com.example.http.RequestTask"/>
 <fullyQualifiedTypeName name="android.nfc.Tag"/>
 <fullyQualifiedTypeName name="java.sql.Date"/>
 <fullyQualifiedTypeName name="com.example.Json.userDataJson"/>
-<fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="com.example.sqllite.MySQLiteHelper"/>
 <fullyQualifiedTypeName name="com.example.bmsaltamedia.MainActivity"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
-<fullyQualifiedTypeName name="com.example.bmsaltamedia.R"/>
 <fullyQualifiedTypeName name="android.widget.CheckBox"/>
 <fullyQualifiedTypeName name="tranduythanh.com.R.id"/>
 <fullyQualifiedTypeName name="android.widget.TextView"/>
@@ -33,20 +26,15 @@
 <fullyQualifiedTypeName name="android.app.AlertDialog"/>
 <fullyQualifiedTypeName name="android.content.DialogInterface"/>
 <fullyQualifiedTypeName name="com.example.bmsaltamedia.R.drawable"/>
-<fullyQualifiedTypeName name="java.util.Date"/>
 <fullyQualifiedTypeName name="org.json.JSONArray"/>
 <fullyQualifiedTypeName name="org.json.JSONObject"/>
-<fullyQualifiedTypeName name="java.lang.Integer"/>
 <fullyQualifiedTypeName name="com.example.Json.reminderDataJson"/>
 <fullyQualifiedTypeName name="android.widget.Button"/>
 <fullyQualifiedTypeName name="com.example.bmsaltamedia.R.id"/>
 <fullyQualifiedTypeName name="com.example.appData.reminderArrayAdapter"/>
 <fullyQualifiedTypeName name="com.example.bmsaltamedia.GCMIntentService"/>
 <fullyQualifiedTypeName name="com.example.appData.userData"/>
-<fullyQualifiedTypeName name="com.example.appData.reminderData"/>
-<fullyQualifiedTypeName name="com.example.bmsaltamedia.ListView_Reminder"/>
 <fullyQualifiedTypeName name="android.net.ConnectivityManager"/>
-<fullyQualifiedTypeName name="android.content.Context"/>
 <fullyQualifiedTypeName name="android.net.NetworkInfo"/>
 <fullyQualifiedTypeName name="android.app.Activity"/>
 <fullyQualifiedTypeName name="com.example.http.network_check"/>
@@ -56,8 +44,20 @@
 <fullyQualifiedTypeName name="com.google.android.gcm.GCMRegistrar"/>
 <fullyQualifiedTypeName name="com.google.GCM.ServerUtilities"/>
 <fullyQualifiedTypeName name="com.google.GCM.CommonUtilities"/>
-<fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="com.example.appData.reminderData"/>
 <fullyQualifiedTypeName name="android.widget.Toast"/>
+<fullyQualifiedTypeName name="com.example.bmsaltamedia.ListView_Reminder"/>
+<fullyQualifiedTypeName name="android.content.SharedPreferences"/>
+<fullyQualifiedTypeName name="android.content.SharedPreferences.Editor"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="com.google.GCM.dataAppSave"/>
+<fullyQualifiedTypeName name="android.content.Context"/>
+<fullyQualifiedTypeName name="com.example.bmsaltamedia.R"/>
+<fullyQualifiedTypeName name="com.example.bmsaltamedia.runRemindNotification"/>
+<fullyQualifiedTypeName name="com.example.sqllite.MySQLiteHelper"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
 <fullyQualifiedTypeName name="com.example.bmsaltamedia.R.string"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
 </qualifiedTypeNameHistroy>

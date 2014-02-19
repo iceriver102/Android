@@ -17,9 +17,14 @@ public class reminderData {
 	private Date date;
 	private String type;
 	public int canComplete;
+	public int sql_id;
 
 	public reminderData() {
 
+	}
+
+	public reminderData(int status) {
+		this.status = status;
 	}
 
 	public reminderData(int msg_id, String title, String content, int status,
@@ -30,6 +35,7 @@ public class reminderData {
 		this.status = status;
 		this.type = type;
 	}
+
 	public reminderData(reminderDataJson dataJson) {
 		this.msg_id = dataJson.id;
 		this.title = dataJson.title;
@@ -39,13 +45,14 @@ public class reminderData {
 		else
 			this.status = 0;
 		this.date = dataJson.getTime();
-		this.type=dataJson.type;
-		this.canComplete=dataJson.canComlete;
+		this.type = dataJson.type;
+		this.canComplete = dataJson.canComlete;
 	}
 
 	public void complete() {
 		if (this.canComplete == 1)
 			this.status = 1;
+		this.canComplete=0;
 	}
 
 	public boolean isComplete() {
@@ -74,7 +81,6 @@ public class reminderData {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-
 
 	@SuppressLint("SimpleDateFormat")
 	public String getDate(String fomat) {
