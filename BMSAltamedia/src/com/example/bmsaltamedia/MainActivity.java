@@ -18,6 +18,8 @@ import com.google.GCM.ServerUtilities;
 import com.google.GCM.WakeLocker;
 import com.google.android.gcm.GCMRegistrar;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,7 +46,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public static String newAction = "";
 	private String regId;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,98 +56,127 @@ public class MainActivity extends Activity implements OnClickListener {
 		GCMRegistrar.checkDevice(this);
 		// Make sure the manifest was properly set - comment out this line
 		// while developing the app, then uncomment it when it's ready.
-		//GCMRegistrar.checkManifest(this);		
-		
+		// GCMRegistrar.checkManifest(this);
+
 		registerReceiver(mHandleMessageReceiver, new IntentFilter(
 				DISPLAY_MESSAGE_ACTION));
 		regId = GCMRegistrar.getRegistrationId(this);
 		if (regId.equals("")) {
 			GCMRegistrar.register(this, SENDER_ID);
 			regId = GCMRegistrar.getRegistrationId(this);
-			
-		}else{
-			if (GCMRegistrar.isRegisteredOnServer(this)) {
-				// Skips registration.
-				Toast.makeText(getApplicationContext(),
-						"Already registered with GCM", Toast.LENGTH_LONG)
-						.show();
-				Log.i("Main", "Already registered with GCM");
-			} else {
-				// Try to register again, but not in the UI thread.
-				// It's also necessary to cancel the thread onDestroy(),
-				// hence the use of AsyncTask instead of a raw thread.
-				final Context context = this;
-				mRegisterTask = new AsyncTask<Void, Void, Void>() {
-					@Override
-					protected Void doInBackground(Void... params) {
-						// Register on our server
-						// On server creates a new user
-						ServerUtilities.register(context, "demo", "demo", regId);
-						return null;
-					}
 
-					@Override
-					protected void onPostExecute(Void result) {
-						mRegisterTask = null;
-					}
+		} else {
 
-				};
-				mRegisterTask.execute(null, null, null);
-			}
+			final Context context = this;
+			mRegisterTask = new AsyncTask<Void, Void, Void>() {
+				@Override
+				protected Void doInBackground(Void... params) {
+					// Register on our server
+					// On server creates a new user
+					ServerUtilities.register(context, "", "", regId);
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(Void result) {
+					mRegisterTask = null;
+				}
+
+			};
+			mRegisterTask.execute(null, null, null);
+
 		}
 		final Button btn_login = (Button) findViewById(R.id.btnlogin);
 		btn_login.setOnClickListener(this);
 		mEdit_User = (EditText) findViewById(R.id.txtUser);
-		mEdit_Pass = (EditText) findViewById(R.id.txtPass);		
-		GCMIntentService.flag=CommonUtilities.flag_login=false;		
+		mEdit_Pass = (EditText) findViewById(R.id.txtPass);
+		GCMIntentService.flag = CommonUtilities.flag_login = false;
+	}
+
+	public boolean checkNetwork() {
+		try {
+			ConnectivityManager cn = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo nf = cn.getActiveNetworkInfo();
+			if (nf != null && nf.isConnected() == true) {
+				// Toast.makeText(this, "Network Available",
+				// Toast.LENGTH_LONG).show();
+				Log.i("check net", "Network Available");
+				return true;
+			} else {
+				// Toast.makeText(this, "Network Not Available",
+				// Toast.LENGTH_LONG)
+				// .show();
+				Log.i("check net", "Network not Available");
+				return false;
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return true;
+		}
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 		switch (v.getId()) {
 		case R.id.btnlogin:
-			String username=mEdit_User.getText().toString().trim();
-			String pass=mEdit_Pass.getText().toString().trim();
-			if(username.equals("")){
-				Log.e("validate","username empty");
-				Toast.makeText(this, this.getText(R.string.Err_validate_Username), Toast.LENGTH_LONG).show();
+			String username = mEdit_User.getText().toString().trim();
+			String pass = mEdit_Pass.getText().toString().trim();
+			if (username.equals("")) {
+				Log.e("validate", "username empty");
+				Toast.makeText(this,
+						this.getText(R.string.Err_validate_Username),
+						Toast.LENGTH_LONG).show();
 				return;
 			}
-			
-			if(pass.equals("")){
+
+			if (pass.equals("")) {
 				Log.e("validate", "mật khẩu rỗng");
-				Toast.makeText(this, this.getText(R.string.Err_validate_password), Toast.LENGTH_LONG).show();
+				Toast.makeText(this,
+						this.getText(R.string.Err_validate_password),
+						Toast.LENGTH_LONG).show();
 				return;
-			}			
-			
-			if (regId.equals("")) {
-				GCMRegistrar.register(this, SENDER_ID);
-				regId = GCMRegistrar.getRegistrationId(this);
-				Log.d("register", "start register");
-			}			
-			if(regId.equals("")){
-				Toast.makeText(this, this.getString(R.string.Err_101), Toast.LENGTH_LONG).show();
-				//regId = GCMRegistrar.getRegistrationId(this);
-				Log.e("try again Reg Id",regId);
-			}else {
-				String jsonString=ServerUtilities.login(username, pass, this.regId);				
-				userDataJson userJson= new userDataJson(jsonString, username, pass);
-				if(userJson.result){
-					MySQLiteHelper db= new MySQLiteHelper(this);
-					db.addUser(userJson);
-					Log.i("dang nhap",userJson.toString());
-					GCMIntentService.flag=CommonUtilities.flag_login=true;
-					Intent i = new Intent(MainActivity.this, ListView_Reminder.class);
-					startActivity(i);	
-					ListView_Reminder.regID=regId;
-					this.finish();
-				}else{
-					Toast.makeText(this, this.getString(R.string.Err_login), Toast.LENGTH_LONG).show();
-					Log.e("dang nhap ERR",userJson.toString());
+			}
+			ServerUtilities.network_check = checkNetwork();
+			if (ServerUtilities.network_check) {
+				if (regId.equals("")) {
+					GCMRegistrar.register(this, SENDER_ID);
+					regId = GCMRegistrar.getRegistrationId(this);
+					Log.d("register", "start register");
 				}
-			}				
+				if (regId.equals("")) {
+					Toast.makeText(this, this.getString(R.string.Err_101),
+							Toast.LENGTH_LONG).show();
+					// regId = GCMRegistrar.getRegistrationId(this);
+					// Log.e("try again Reg Id",regId);
+				} else {
+					String jsonString = ServerUtilities.login(username, pass,
+							this.regId);
+					userDataJson userJson = new userDataJson(jsonString,
+							username, pass);
+					if (userJson.result) {
+						MySQLiteHelper db = new MySQLiteHelper(this);
+						db.addUser(userJson);
+						Log.i("dang nhap", userJson.toString());
+						GCMIntentService.flag = CommonUtilities.flag_login = true;
+						Intent i = new Intent(MainActivity.this,
+								ListView_Reminder.class);
+						startActivity(i);
+						ListView_Reminder.regID = regId;
+						this.finish();
+					} else {
+						Toast.makeText(this,
+								this.getString(R.string.Err_login),
+								Toast.LENGTH_LONG).show();
+						Log.e("dang nhap ERR", userJson.toString());
+					}
+				}
+			} else {
+				Toast.makeText(this, "Không có kết nối internet!",
+						Toast.LENGTH_LONG).show();
+			}
 			break;
 		default:
 			break;
@@ -178,7 +209,9 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 			WakeLocker.release();
 		}
+
 	};
+
 	public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
 		@Override
@@ -197,6 +230,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 		try {
 			unregisterReceiver(mHandleMessageReceiver);
+			if (CommonUtilities.flag_login)
+				GCMRegistrar.unregister(this);
 			GCMRegistrar.onDestroy(this);
 		} catch (Exception e) {
 			Log.e("UnRegister Receiver Error", "> " + e.getMessage());

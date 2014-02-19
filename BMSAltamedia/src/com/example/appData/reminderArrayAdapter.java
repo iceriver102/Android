@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
@@ -73,8 +74,12 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 								ListView_Reminder.user.user_id);
 						if (flag) {
 							cb.setEnabled(false);
-							myArray.remove(remind);	
-							//this.notifyAll();
+							myArray.remove(remind);
+							notifyDataSetChanged();
+						}else{
+							cb.setChecked(false);
+							Toast.makeText(v.getContext(), v.getContext().getString(R.string.Err_complete), Toast.LENGTH_LONG).show();
+							Log.i("complete", "khong the complete");
 						}
 					} else {
 						remind.setStatus(0);

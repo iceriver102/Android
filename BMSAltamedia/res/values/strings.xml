@@ -13,6 +13,5 @@
     <string name="content_logo_img">Logo Altamedia</string>  
     <string name="confirm_logout">Bạn có muốn đăng xuất không?</string> 
     <string name="title_dialog_logout">Đăng xuất</string> 
-     
-    
+     <string name="empty_reminder">Không có Reminder</string>     
 </resources>

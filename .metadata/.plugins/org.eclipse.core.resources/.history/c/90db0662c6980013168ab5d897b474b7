@@ -1,0 +1,27 @@
+package com.example.http;
+
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
+public class Network_check extends Activity {
+	private ConnectivityManager cn;
+	
+	public boolean check() {
+		this.cn = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo nf = cn.getActiveNetworkInfo();
+		if (nf != null && nf.isConnected() == true) {
+			//Toast.makeText(this, "Network Available", Toast.LENGTH_LONG).show();
+			Log.i("check net","Network Available");
+			return true;
+		} else {
+			//Toast.makeText(this, "Network Not Available", Toast.LENGTH_LONG)
+					//.show();
+			Log.i("check net","Network not Available");
+			return false;
+
+		}
+	}
+
+}

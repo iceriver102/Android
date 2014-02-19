@@ -19,90 +19,123 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.webkit.WebView.FindListener;
 
 import com.example.appData.reminderData;
-import com.example.appData.userData;
 import com.example.http.RequestTask;
-//import com.altamedia.androidgcm.R;
 import com.google.android.gcm.GCMRegistrar;
 
 public class ServerUtilities {
 	private static final int MAX_ATTEMPTS = 5;
 	private static final int BACKOFF_MILLI_SECONDS = 2000;
 	private static final Random random = new Random();
-	public static final String FIELD_RESULT="result";
-	
-	public static String login(String user,String pass,String regID){
-		Log.i(TAG,"login device "+regID);		
-		String serverUrl = SERVER_URL;		
-		try{
-			String url=serverUrl+ "?mod=login_reminder&device=android&username=" + user + "&password="
-					+ pass + "&token="+regID;
-			AsyncTask<String, String, String> jsonString = new RequestTask().execute(url);
-			Log.i(TAG,"Json: "+ jsonString.get());
-			return jsonString.get();
-		}catch(Exception ex){
-			Log.e(TAG,"không thể đăng nhập");
+	public static final String FIELD_RESULT = "result";
+	public static String Err = "";
+	public static boolean network_check;
+
+	public static String login(String user, String pass, String regID) {
+
+		Log.i(TAG, "login device " + regID);
+		if (network_check) {
+			String serverUrl = SERVER_URL;
+			try {
+				String url = serverUrl
+						+ "?mod=login_reminder&device=android&username=" + user
+						+ "&password=" + pass + "&token=" + regID;
+				AsyncTask<String, String, String> jsonString = new RequestTask()
+						.execute(url);
+				Log.i(TAG, "Json: " + jsonString.get());
+				Err = "";
+				return jsonString.get();
+			} catch (Exception ex) {
+				Log.e(TAG, "không thể đăng nhập");
+				Err = "Mất kết nối";
+				return "";
+			}
+		} else {
+			Log.e("network", "khong the ket noi internet");
+			Err = "Mất kết nối";
 			return "";
 		}
-		
+
 	}
-	public static boolean logOut(int user_id,String regID){
-		
-		Log.i(TAG,"logOut device "+regID);		
-		String serverUrl = SERVER_URL;		
-		try{
-			String url=serverUrl+ "?mod=logout_reminder&user_id=" + user_id + "&token="+regID;
-			AsyncTask<String, String, String> jsonString = new RequestTask().execute(url);
-			Log.i(TAG,"Json: "+ jsonString.get());
-			JSONObject json = new JSONObject(jsonString.get());
-			Log.i(TAG,jsonString.get());	
-			return json.getBoolean(FIELD_RESULT);
-		}catch(Exception ex){
-			Log.e(TAG,"không thể logOut");
+
+	public static boolean logOut(int user_id, String regID) {
+		Err = "";
+		if (network_check) {
+			Log.i(TAG, "logOut device " + regID);
+			String serverUrl = SERVER_URL;
+			try {
+				String url = serverUrl + "?mod=logout_reminder&user_id="
+						+ user_id + "&token=" + regID;
+				AsyncTask<String, String, String> jsonString = new RequestTask()
+						.execute(url);
+				Log.i(TAG, "Json: " + jsonString.get());
+				JSONObject json = new JSONObject(jsonString.get());
+				Log.i(TAG, jsonString.get());
+				return json.getBoolean(FIELD_RESULT);
+			} catch (Exception ex) {
+				Log.e(TAG, "không thể logOut");
+				Err = "Mất kết nối";
+				return false;
+			}
+		} else {
+			Err = "Mất kết nối";
 			return false;
 		}
 	}
-	
-	public static String getRemindData(int user_id){
-		Log.i(TAG,"get Reminder");		
-		String serverUrl = SERVER_URL;
-		try{
-			String url=serverUrl+ "?mod=get_reminder&user_id=" + user_id;
-			AsyncTask<String, String, String> jsonString = new RequestTask().execute(url);
-			return jsonString.get();
-		}catch(Exception e){
-			e.printStackTrace();
+
+	public static String getRemindData(int user_id) {
+		Err = "";
+		if (network_check) {
+			Log.i(TAG, "get Reminder");
+			String serverUrl = SERVER_URL;
+			try {
+				String url = serverUrl + "?mod=get_reminder&user_id=" + user_id;
+				AsyncTask<String, String, String> jsonString = new RequestTask()
+						.execute(url);
+				return jsonString.get();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Err = "Mất kết nối";
+				return null;
+			}
+		} else {
+			Err = "Mất kết nối";
 			return null;
-		}	
+		}
 	}
-	public static boolean complete(reminderData remind,int user_id){
-		/*http://bms.altamedia.vn/api.php?mod=reminder_action
 
-			user_id
-			id
-			type : task/project (lấy từ get_reminder)
-			action : complete
-
-			return
-			{
-				result : true/false
-				msg : 
-			}*/
-		
-		String serverUrl = SERVER_URL;
-		try{
-			String url=serverUrl+ "?mod=reminder_action&action=complete&user_id=" + user_id+"&id="+remind.getID()+"&type="+remind.getType();
-			AsyncTask<String, String, String> jsonString = new RequestTask().execute(url);
-			Log.i(TAG,"Json: "+ jsonString.get());
-			JSONObject json = new JSONObject(jsonString.get());
-			Log.i(TAG,jsonString.get());	
-			return json.getBoolean(FIELD_RESULT);
-		}catch(Exception e){
-			e.printStackTrace();
+	public static boolean complete(reminderData remind, int user_id) {
+		/*
+		 * http://bms.altamedia.vn/api.php?mod=reminder_action
+		 * 
+		 * user_id id type : task/project (lấy từ get_reminder) action :
+		 * complete
+		 * 
+		 * return { result : true/false msg : }
+		 */
+		if (network_check) {
+			String serverUrl = SERVER_URL;
+			try {
+				String url = serverUrl
+						+ "?mod=reminder_action&action=complete&user_id="
+						+ user_id + "&id=" + remind.getID() + "&type="
+						+ remind.getType();
+				AsyncTask<String, String, String> jsonString = new RequestTask()
+						.execute(url);
+				Log.i(TAG, "Url: " + url);
+				JSONObject json = new JSONObject(jsonString.get());
+				Log.i(TAG, jsonString.get());
+				return json.getBoolean(FIELD_RESULT);
+			} catch (Exception e) {
+				e.printStackTrace();
+				Err = "Mất kết nối";
+				return false;
+			}
+		} else {
+			Err = "Mất kết nối";
 			return false;
-		}	
+		}
 	}
 
 	/**
@@ -131,8 +164,9 @@ public class ServerUtilities {
 				// R.string.server_registering, i, MAX_ATTEMPTS));
 				post(serverUrl, params);
 				GCMRegistrar.setRegisteredOnServer(context, true);
-				//String message = context.getString(R.string.server_registered);
-				//CommonUtilities.displayMessage(context, message, "");
+				// String message =
+				// context.getString(R.string.server_registered);
+				// CommonUtilities.displayMessage(context, message, "");
 				return;
 			} catch (IOException e) {
 				// Here we are simplifying and retrying on any error; in a real
@@ -155,8 +189,8 @@ public class ServerUtilities {
 				backoff *= 2;
 			}
 		}
-		//String message = context.getString(R.string.server_register_error,
-			//	MAX_ATTEMPTS);
+		// String message = context.getString(R.string.server_register_error,
+		// MAX_ATTEMPTS);
 		// CommonUtilities.displayMessage(context, message);
 	}
 
@@ -165,24 +199,8 @@ public class ServerUtilities {
 	 */
 	public static void unregister(final Context context, final String regId) {
 		Log.i(TAG, "unregistering device (regId = " + regId + ")");
-		String serverUrl = SERVER_URL + "/unregister";
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("regId", regId);
-		try {
-			post(serverUrl, params);
+		if (GCMRegistrar.isRegisteredOnServer(context))
 			GCMRegistrar.setRegisteredOnServer(context, false);
-		//	String message = context.getString(R.string.server_unregistered);
-			//CommonUtilities.displayMessage(context, message, "");
-		} catch (IOException e) {
-			// At this point the device is unregistered from GCM, but still
-			// registered in the server.
-			// We could try to unregister again, but it is not necessary:
-			// if the server tries to send a message to the device, it will get
-			// a "NotRegistered" error message and should unregister the device.
-		//	String message = context.getString(
-				//	R.string.server_unregister_error, e.getMessage());
-			//CommonUtilities.displayMessage(context, message, "");
-		}
 	}
 
 	/**

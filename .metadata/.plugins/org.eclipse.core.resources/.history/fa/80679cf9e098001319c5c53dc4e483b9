@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Err_101">Error 101: Không thể lấy ID của thiết bị bạn hãy thử reset lại ứng dụng.</string>
+    <string name="Err_101">Error 404: Không thể kết nối tới Internet.</string>
+    <string name="Err_login">Tên đăng nhập hoặc mật khẩu không đúng.</string>
+    <string name="Err_validate_Username">Tên đăng nhập không được để trống.</string>
+    <string name="Err_validate_password">Mật khẩu không được để trống.</string>  
+</resources>

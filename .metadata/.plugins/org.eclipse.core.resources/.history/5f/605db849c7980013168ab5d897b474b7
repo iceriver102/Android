@@ -1,0 +1,50 @@
+package com.example.http;
+
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.util.Log;
+public class Network_check extends Activity {
+	private ConnectivityManager cn;
+	public void onCreate(Bundle savedInstanceState) 
+    {
+        super.onCreate(savedInstanceState);
+        //setContentView(R.layout.main);
+      //  tvstatus=(TextView)findViewById(R.id.txtviewstatus);
+        cn=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nf=cn.getActiveNetworkInfo();
+        if(nf != null && nf.isConnected()==true )
+        {
+           // Toast.makeText(this, "Network Available", Toast.LENGTH_LONG).show();
+           // tvstatus.setText("Network Available");
+        }
+        else
+        {
+          //  Toast.makeText(this, "Network Not Available", Toast.LENGTH_LONG).show();
+           // tvstatus.setText("Network Not Available");
+        }
+    }
+	public boolean check() {
+		try{
+		this.cn = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo nf = cn.getActiveNetworkInfo();
+		if (nf != null && nf.isConnected() == true) {
+			//Toast.makeText(this, "Network Available", Toast.LENGTH_LONG).show();
+			Log.i("check net","Network Available");
+			return true;
+		} else {
+			//Toast.makeText(this, "Network Not Available", Toast.LENGTH_LONG)
+					//.show();
+			Log.i("check net","Network not Available");
+			return false;
+
+		}
+		}catch(Exception ex){
+			ex.printStackTrace();
+			return true;
+		}
+	}
+
+}

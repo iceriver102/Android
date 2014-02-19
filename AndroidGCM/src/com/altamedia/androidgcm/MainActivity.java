@@ -168,6 +168,7 @@ public class MainActivity extends Activity {
 		}
 		try {
 			unregisterReceiver(mHandleMessageReceiver);
+			//GCMRegistrar.unregister(this);
 			GCMRegistrar.onDestroy(this);
 		} catch (Exception e) {
 			Log.e("UnRegister Receiver Error", "> " + e.getMessage());
