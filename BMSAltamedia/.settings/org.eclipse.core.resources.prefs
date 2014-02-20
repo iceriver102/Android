@@ -1,8 +1,8 @@
 eclipse.preferences.version=1
-encoding//src/com/example/Json/reminderDataJson.java=UTF-8
-encoding//src/com/example/Json/userDataJson.java=UTF-8
-encoding//src/com/example/appData/reminderArrayAdapter.java=UTF-8
-encoding//src/com/example/bmsaltamedia/ListView_Reminder.java=UTF-8
-encoding//src/com/example/bmsaltamedia/MainActivity.java=UTF-8
-encoding//src/com/example/bmsaltamedia/runRemindNotification.java=UTF-8
-encoding//src/com/google/GCM/ServerUtilities.java=UTF-8
+encoding//src/com/altamedia/GCM/ServerUtilities.java=UTF-8
+encoding//src/com/altamedia/Json/reminderDataJson.java=UTF-8
+encoding//src/com/altamedia/Json/userDataJson.java=UTF-8
+encoding//src/com/altamedia/appData/reminderArrayAdapter.java=UTF-8
+encoding//src/com/altamedia/bmsaltamedia/ListView_Reminder.java=UTF-8
+encoding//src/com/altamedia/bmsaltamedia/MainActivity.java=UTF-8
+encoding//src/com/altamedia/bmsaltamedia/runRemindNotification.java=UTF-8

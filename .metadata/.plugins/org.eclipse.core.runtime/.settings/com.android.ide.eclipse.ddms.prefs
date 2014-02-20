@@ -18,4 +18,4 @@ logcat.view.colsize.TID=50
 logcat.view.colsize.Tag=229
 logcat.view.colsize.Text=543
 logcat.view.colsize.Time=130
-logcat.view.filters.list=name\: 'App', tag\: '', text\: '', pid\: '', app\: 'com.example', level\: 'verbose', name\: 'Altamedia', tag\: '', text\: '', pid\: '', app\: 'com.altamedia', level\: 'verbose', name\: 'androidhive', tag\: '', text\: '', pid\: '', app\: 'info.androidhive.jsonparsing', level\: 'verbose', 
+logcat.view.filters.list=name\: 'App', tag\: '', text\: '', pid\: '', app\: 'com.altamedia', level\: 'verbose', name\: 'Altamedia', tag\: '', text\: '', pid\: '', app\: 'com.altamedia', level\: 'verbose', name\: 'androidhive', tag\: '', text\: '', pid\: '', app\: 'info.androidhive.jsonparsing', level\: 'verbose', 
