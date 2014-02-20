@@ -135,10 +135,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 								.getSystemService(Context.ACTIVITY_SERVICE))
 								.getRunningTasks(1).get(0).topActivity
 								.getPackageName())) {
-			// App is not in the foreground
-			notificationManager.notify(0, notification);
+			// App is not in the foreground				
 			httpGetData(context);
 		}
+		notificationManager.notify(0, notification);
+		
 	}
 
 	public static void reLoadLayout(Context context) {

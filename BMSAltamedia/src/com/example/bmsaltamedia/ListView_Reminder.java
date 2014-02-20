@@ -7,7 +7,10 @@ import static com.google.GCM.CommonUtilities.DISPLAY_MESSAGE_ACTION;
 import static com.google.GCM.CommonUtilities.EXTRA_ACTION;
 import static com.google.GCM.CommonUtilities.EXTRA_MESSAGE;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -24,6 +27,7 @@ import com.google.GCM.WakeLocker;
 import com.google.GCM.dataAppSave;
 import com.google.android.gcm.GCMRegistrar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -37,6 +41,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.CalendarContract.Reminders;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import android.view.View;
@@ -52,18 +57,19 @@ import android.widget.Toast;
  */
 public class ListView_Reminder extends Activity implements OnClickListener {
 
-	Context context;
+	public static Context context;
 	public TextView txt_msg;
 	// Asyntask
 	AsyncTask<Void, Void, Void> mRegisterTask;
 	public static String newAction = "";
-	
+
 	public static userData user;
 	public static String regID = "";
 	ArrayList<reminderData> arrReminder = new ArrayList<reminderData>();
 	public static reminderArrayAdapter adapter = null;
 	ListView listView = null;
-	private  MySQLiteHelper db;
+	private MySQLiteHelper db;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -86,7 +92,7 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		Button btn_refresh = (Button) findViewById(R.id.btn_refesh);
 		btn_refresh.setOnClickListener(this);
 		CommonUtilities.flag_login = GCMIntentService.flag = true;
-		
+
 		listView = (ListView) this.findViewById(R.id.ListReminder);
 		arrReminder = new ArrayList<reminderData>();
 		adapter = new reminderArrayAdapter(this, R.layout.item_listview,
@@ -96,7 +102,8 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		getData();
 		loadData();
 		dataAppSave.savePreferences(this, "login", "1");
-		dataAppSave.savePreferences(this, "user_id", String.valueOf(user.user_id));
+		dataAppSave.savePreferences(this, "user_id",
+				String.valueOf(user.user_id));
 
 	}
 
@@ -121,19 +128,18 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 	}
 
 	private void getData() {
-		ServerUtilities.network_check = this.checkNetwork();		
+		ServerUtilities.network_check = this.checkNetwork();
 		if (ServerUtilities.network_check) {
 			httpGetData();
 		} else {
-			Toast.makeText(this, this.getString(R.string.Err_404), Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(this, this.getString(R.string.Err_404),
+					Toast.LENGTH_LONG).show();
 		}
 	}
-	public void httpGetData(){
-		//Log.e("static","save data base");
+
+	public void httpGetData() {
+		// Log.e("static","save data base");
 		String jsonStr = ServerUtilities.getRemindData(user.user_id);
-		
-		Log.e("Json", jsonStr);
 		db.emptyReminder();
 		if (jsonStr != null) {
 			try {
@@ -147,48 +153,115 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 							reminderData tmpReminder = new reminderData(
 									new reminderDataJson(item));
 							db.addReminder(tmpReminder);
-							//Log.i("Reminder", tmpReminder.toString());
-							
+							// Log.i("Reminder", tmpReminder.toString());
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
-				}else{
-					
+				} else {
+
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
 	}
-	public void loadData(){
-		List<reminderData> listReminder= db.getAllReminder();
+
+	@SuppressLint("SimpleDateFormat")
+	private List<reminderData> Where(Date date, int stt, List<reminderData> list) {
+		List<reminderData> listReminder = new ArrayList<reminderData>();
+		int size = list.size();
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+		String strDate = formatter.format(date);
+		if (stt == 0) {
+			for (int i = 0; i < size; i++) {
+				reminderData item = list.get(i);
+				if (item.getDate("yyyy-MM-dd").equals(strDate)) {
+					listReminder.add(item);
+				}
+			}
+		} else if (stt == 1) {
+			for (int i = 0; i < size; i++) {
+				reminderData item = list.get(i);
+				if (item.getDate("yyyy-MM-dd").compareTo(strDate) >= 0) {
+					listReminder.add(item);
+				}
+			}
+		} else if (stt == -1) {
+			for (int i = 0; i < size; i++) {
+				reminderData item = list.get(i);
+				if (item.getDate("yyyy-MM-dd").compareTo(strDate) < 0) {
+					listReminder.add(item);
+				}
+			}
+		}
+
+		return listReminder;
+	}
+
+	public void loadData() {
+		List<reminderData> listReminder = db.getAllReminder();
+		List<reminderData> last_listReminder;
+		// List<reminderData> cur_listReminder;
+		List<reminderData> fur_listReminder;
+		Date dateNow = new Date();
+		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+		String strDate = formatter.format(dateNow);
+		last_listReminder = this.Where(dateNow, -1, listReminder);
+		// cur_listReminder= this.Where(new Date(), 0, listReminder);
+		fur_listReminder = this.Where(dateNow, 1, listReminder);
+
+		Log.e("check", "last:" + last_listReminder.size() + ", fur:"
+				+ fur_listReminder.size());
+
 		adapter.clear();
-		int size=listReminder.size();
-		if(size>0){
-			for(int i=0; i<size;i++){
-				reminderData tmp= listReminder.get(i);
-				adapter.add(tmp);
-				
-			}			
+		int size = listReminder.size();
+		if (size > 0) {
+			int lastSize = last_listReminder.size();
+			if (lastSize > 0) {
+				reminderData title = new reminderData(
+						this.getString(R.string.title_group_last)
+								+ " "
+								+ last_listReminder.get(0)
+										.getDate("dd/MM/yyyy"), this
+								.getResources().getColor(
+										R.color.color_last_remender));
+				adapter.addSeparatorItem(title);
+				for (int i = 0; i < lastSize; i++) {
+					reminderData tmp = last_listReminder.get(i);
+					adapter.add(tmp);
+				}
+
+			}
+			/*
+			 * int cur_size= cur_listReminder.size(); if(cur_size>0){
+			 * reminderData title= new
+			 * reminderData("Công việc hôm nay",this.getResources
+			 * ().getColor(R.color.color_curent));
+			 * adapter.addSeparatorItem(title); for(int i=0;i<cur_size;i++){
+			 * reminderData tmp= cur_listReminder.get(i); adapter.add(tmp); }
+			 * 
+			 * }
+			 */
+			int fur_size = fur_listReminder.size();
+			if (fur_size > 0) {
+				reminderData title = new reminderData(
+						this.getString(R.string.title_group_next) + " "
+								+ strDate,
+						this.getResources().getColor(R.color.color_upcomming));
+				adapter.addSeparatorItem(title);
+				for (int i = 0; i < fur_size; i++) {
+					reminderData tmp = fur_listReminder.get(i);
+					adapter.add(tmp);
+				}
+
+			}
 		}
 		adapter.notifyDataSetChanged();
-		//db.emptyReminder();
-	}
-	private void applyDemoData(int num) {
-
-		for (int i = 0; i < num; i++) {
-			try {
-				reminderData tmpReminder = new reminderData(i, "title " + i,
-						"content " + i, i % 2, "demo");
-				tmpReminder.setDate("22/12/2014", "dd/MM/yyyy");
-				this.adapter.add(tmpReminder);
-				this.adapter.notifyDataSetChanged();
-			} catch (Exception e) {
-				Log.e("ERR adapter", e.getMessage());
-			}
-
-		}
+		Log.e("layout", "reload layout");
 	}
 
 	@Override
@@ -205,7 +278,6 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		default:
 			break;
 		}
-
 	}
 
 	public void logOut() {
@@ -231,7 +303,6 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		Intent i = new Intent(ListView_Reminder.this, MainActivity.class);
 		startActivity(i);
 		this.finish();
-
 	}
 
 	public void ConfirmDialogLogout() {
@@ -262,7 +333,7 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 
 		// return true;
 	}
-	
+
 	/**
 	 * Receiving push messages
 	 * */
@@ -281,24 +352,13 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			setResultCode(Activity.RESULT_OK);
 		}
 	}
-	
+
 	private final BroadcastReceiver mHandleMessageReceiver = new GcmBroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-
-			
-
-			// Waking up mobile if it is sleeping
 			WakeLocker.acquire(getApplicationContext());
-
-			/**
-			 * Take appropriate action on this message depending upon your app
-			 * requirement For now i am just displaying it on the screen
-			 * */
-
 			if (ListView_Reminder.this != null) {
 				ListView_Reminder.this.httpGetData();
-				ListView_Reminder.this.loadData();
 			}
 
 			// Showing received message
@@ -309,7 +369,10 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 							.getRunningTasks(1).get(0).topActivity
 							.getPackageName())) {
 				// App is not in the foreground
-				
+				ListView_Reminder.this.loadData();
+
+			} else {
+				ListView_Reminder.this.loadData();
 			}
 
 			// Releasing wake lock
@@ -324,7 +387,7 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		}
 		try {
 			unregisterReceiver(mHandleMessageReceiver);
-			//GCMRegistrar.unregister(this);
+			// GCMRegistrar.unregister(this);
 			GCMRegistrar.onDestroy(this);
 		} catch (Exception e) {
 			Log.e("UnRegister Receiver Error", "> " + e.getMessage());

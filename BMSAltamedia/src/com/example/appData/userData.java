@@ -15,7 +15,6 @@ public class userData {
 	public String fullName;
 	private String pass;
 	public Date date;
-	
 
 	public String getUserName() {
 		return this.userName;

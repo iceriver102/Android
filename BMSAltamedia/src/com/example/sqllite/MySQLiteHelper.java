@@ -383,7 +383,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	@SuppressLint("SimpleDateFormat")
 	public int CountReminder(Date date) {
-		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Format formatter = new SimpleDateFormat("yyyyMMdd");
 		String dateStr = formatter.format(date);
 		
 		int num = 0;
@@ -392,7 +392,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		for (int i = 0; i < size; i++) {
 			reminderData tmp = listReminder.get(i);
 			Log.e("skfhl",tmp.getDate("dd/MM/yyyy")+"<->"+dateStr);
-			if (tmp.getDate("dd/MM/yyyy").equals(dateStr)) {
+			if (tmp.getDate("yyyyMMdd").compareTo(dateStr)<=0) {
 				num++;
 			}
 		}

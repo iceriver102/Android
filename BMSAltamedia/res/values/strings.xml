@@ -15,6 +15,8 @@
     <string name="confirm_logout">Bạn có muốn đăng xuất không?</string>
     <string name="title_dialog_logout">Đăng xuất</string>
     <string name="empty_reminder">Không có Reminder</string>
-    <string name="work_wait_title">Không có Reminder</string>
+    <string name="work_wait_title">BMS Reminder</string>
+    <string name="title_group_last">Công việc quá hạn</string>
+     <string name="title_group_next">Công việc hôm nay</string>
 
 </resources>

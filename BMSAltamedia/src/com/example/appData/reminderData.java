@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.example.Json.reminderDataJson;
-
 public class reminderData {
 	private int msg_id;
 	public String title;
@@ -18,11 +17,17 @@ public class reminderData {
 	private String type;
 	public int canComplete;
 	public int sql_id;
+	public boolean title_type=false;
+	public int color;
 
 	public reminderData() {
 
 	}
-
+	public reminderData(String title, int color) {
+		title_type=true;
+		this.title=title;
+		this.color= color;
+	}
 	public reminderData(int status) {
 		this.status = status;
 	}
@@ -34,6 +39,7 @@ public class reminderData {
 		this.content = content;
 		this.status = status;
 		this.type = type;
+		
 	}
 
 	public reminderData(reminderDataJson dataJson) {
@@ -50,9 +56,11 @@ public class reminderData {
 	}
 
 	public void complete() {
-		if (this.canComplete == 1)
+		if (this.canComplete == 1){
 			this.status = 1;
-		this.canComplete=0;
+			this.canComplete=0;
+			
+		}
 	}
 
 	public boolean isComplete() {

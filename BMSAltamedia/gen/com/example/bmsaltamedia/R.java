@@ -20,7 +20,10 @@ public final class R {
         public static final int black=0x7f04000d;
         public static final int blue=0x7f04000f;
         public static final int color_black=0x7f040007;
+        public static final int color_curent=0x7f040012;
+        public static final int color_last_remender=0x7f040013;
         public static final int color_orange=0x7f040008;
+        public static final int color_upcomming=0x7f040011;
         public static final int color_white=0x7f040006;
         public static final int custom_theme_color=0x7f040009;
         public static final int gray=0x7f04000b;
@@ -59,7 +62,7 @@ public final class R {
     }
     public static final class id {
         public static final int ListReminder=0x7f09000e;
-        public static final int action_settings=0x7f09000f;
+        public static final int action_settings=0x7f090011;
         public static final int btn_logOut=0x7f09000d;
         public static final int btn_refesh=0x7f09000c;
         public static final int btnlogin=0x7f090004;
@@ -71,15 +74,18 @@ public final class R {
         public static final int layoutInput=0x7f090001;
         public static final int layoutMain=0x7f09000a;
         public static final int textView1=0x7f090005;
+        public static final int title_item=0x7f09000f;
         public static final int txtPass=0x7f090003;
         public static final int txtTitle=0x7f09000b;
         public static final int txtUser=0x7f090002;
+        public static final int txt_title_group=0x7f090010;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int flash_layout=0x7f030001;
         public static final int item_listview=0x7f030002;
         public static final int main_view_reminder=0x7f030003;
+        public static final int title_item=0x7f030004;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -103,6 +109,8 @@ public final class R {
         public static final int place_user_name=0x7f06000d;
         public static final int place_user_pass=0x7f06000e;
         public static final int title_dialog_logout=0x7f060012;
+        public static final int title_group_last=0x7f060015;
+        public static final int title_group_next=0x7f060016;
         public static final int user_name=0x7f060009;
         public static final int user_pass=0x7f06000a;
         public static final int work_wait_title=0x7f060014;

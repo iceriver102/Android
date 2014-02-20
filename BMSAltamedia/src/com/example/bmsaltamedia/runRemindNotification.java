@@ -11,7 +11,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
+import android.util.Log;
 
 
 public class runRemindNotification extends Service {
@@ -29,11 +32,28 @@ public class runRemindNotification extends Service {
 
 	@Override
 	public void onCreate() {
-		context = this;
-		
+		context = this;	
 
 	}
+	public boolean checkNetwork() {
+		try {
+			ConnectivityManager cn = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo nf = cn.getActiveNetworkInfo();
+			if (nf != null && nf.isConnected() == true) {
 
+				Log.i("check net", "Network Available");
+				return true;
+			} else {
+
+				Log.i("check net", "Network not Available");
+				return false;
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return true;
+		}
+	}
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onDestroy() {
