@@ -73,8 +73,9 @@ public class runRemindNotification extends Service {
 				// TODO Auto-generated method stub
 				try {
 					while (true) {
-						runNotifycation();
 						Thread.sleep(runRemindNotification.time);
+						runNotifycation();
+						
 					}
 				} catch (Exception e) {
 
@@ -111,7 +112,6 @@ public class runRemindNotification extends Service {
 
 		// Vibrate if vibrate is enabled
 		notification.defaults |= Notification.DEFAULT_VIBRATE;
-
 		notificationManager.notify(NOTIFY_ME_ID, notification);
 
 	}
@@ -120,12 +120,10 @@ public class runRemindNotification extends Service {
 		int num = countRemind();
 		if (num>0) {
 			try {
-				this.createNotification(context, this.getString(R.string.work_wait_title),"Bạn có "+num+" chưa hoàn thành");
+				this.createNotification(context, this.getString(R.string.work_wait_title),"Bạn có "+num+" công việc chưa hoàn thành");
 			} catch (Exception ex) {
 
 			}
-		} else {
-			onDestroy();
 		}
 	}
 

@@ -71,7 +71,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		} else {
 			Log.e(TAG, "Received message cancel msg[" + message + "]");
-			// generateNotification(context, action, message);
+			
 		}
 	}
 
@@ -152,7 +152,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// Log.e("static","save data base");
 		int userid = Integer.parseInt(dataAppSave.loadSavedPreferences(context,
 				"user_id"));
-		String jsonStr = ServerUtilities.getRemindData(userid);
+		String acess=dataAppSave.loadSavedPreferences(context, "access_token");
+		String jsonStr = ServerUtilities.getRemindData(userid,acess);
 		Log.e("Json", " "+jsonStr);
 		MySQLiteHelper db = new MySQLiteHelper(context);
 		

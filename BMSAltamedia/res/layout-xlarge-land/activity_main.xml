@@ -35,16 +35,20 @@
             android:layout_gravity="center"
             android:layout_marginBottom="5dp"
             android:background="@drawable/txt_user_background"
-            android:padding="5dp" >
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="60dp"
+            android:paddingTop="5dp" >
 
             <EditText
                 android:id="@+id/txtUser"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="0.64"
                 android:background="@color/transparent"
                 android:ems="10"
                 android:hint="@string/place_user_name"
-                android:paddingLeft="5dp"
+                android:paddingLeft="15dp"
                 android:singleLine="true" >
 
                 <requestFocus android:focusable="true" />
@@ -56,12 +60,16 @@
             android:layout_height="46px"
             android:layout_gravity="center"
             android:background="@drawable/txt_pass_backdground"
-            android:padding="5dp" >
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="60dp"
+            android:paddingTop="5dp" >
 
             <EditText
                 android:id="@+id/txtPass"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="0.62"
                 android:background="@color/transparent"
                 android:ems="10"
                 android:hint="@string/place_user_pass"

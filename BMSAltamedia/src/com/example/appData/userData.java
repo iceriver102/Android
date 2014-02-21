@@ -15,7 +15,8 @@ public class userData {
 	public String fullName;
 	private String pass;
 	public Date date;
-
+	public String access_token;
+	
 	public String getUserName() {
 		return this.userName;
 	}
@@ -66,7 +67,7 @@ public class userData {
 	
 	@Override
 	public String toString() {
-		return "USER [id=" + id + ", username=" + this.userName + ", pass=" + this.pass +", full name= "+this.fullName+", Date=" +this.getDate("dd/MM/yyyy")
+		return "USER [id=" + id + ", username=" + this.userName+", access_token: "+this.access_token + ", pass=" + this.pass +", full name= "+this.fullName+", Date=" +this.getDate("dd/MM/yyyy")
 				+ "]";
 	}
 

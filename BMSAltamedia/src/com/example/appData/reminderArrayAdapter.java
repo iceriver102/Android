@@ -96,7 +96,7 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 
 						if (cb.isChecked()) {
 							boolean flag = ServerUtilities.complete(remind,
-									ListView_Reminder.user.user_id);
+									ListView_Reminder.user.user_id,ListView_Reminder.user.access_token);
 							Log.d("flag", flag + "");
 							if (flag) {
 								remind.complete();

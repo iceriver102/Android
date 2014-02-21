@@ -10,11 +10,13 @@ public class userDataJson {
 	private String user;
 	private String pass;
 	private int user_id;
+	public String access_token;
 
 	public static final String FIELD_FULL_NAME = "user_name";
 	public static final String FIELD_RESULT = "result";
 	public static final String FIELD_MSG = "msg";
 	public static final String FIELD_ID = "user_id";
+	public static final String FIELD_ACCESS = "user_access_token";
 
 	public userDataJson(String datajson) {
 		if (datajson.equals("")) {
@@ -27,6 +29,7 @@ public class userDataJson {
 				this.user = "";
 				this.pass = "";
 				this.user_id = json.getInt(FIELD_ID);
+				this.access_token = json.getString(FIELD_ACCESS);
 			} catch (Exception ex) {
 				result = false;
 				ERR = ex.getMessage();
@@ -46,6 +49,7 @@ public class userDataJson {
 			this.msg = json.getString(FIELD_MSG);
 			this.user = user;
 			this.pass = pass;
+			this.access_token = json.getString(FIELD_ACCESS);
 			this.ERR = "";
 		} catch (Exception ex) {
 			result = false;
@@ -97,7 +101,8 @@ public class userDataJson {
 	@Override
 	public String toString() {
 		return "DATAJSON [user_id:" + this.user_id + ", user:" + this.user
-				+ ", fullName:" + this.fullName + ", pass:" + this.pass
-				+ ", result:" + this.result + ", msg:" + this.msg + "]";
+				+ ", acess:" + this.access_token + ", fullName:"
+				+ this.fullName + ", pass:" + this.pass + ", result:"
+				+ this.result + ", msg:" + this.msg + "]";
 	}
 }

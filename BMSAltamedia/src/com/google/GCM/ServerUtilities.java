@@ -30,7 +30,7 @@ public class ServerUtilities {
 	private static final Random random = new Random();
 	public static final String FIELD_RESULT = "result";
 	public static String Err = "";
-	public static boolean network_check=true;
+	public static boolean network_check = true;
 
 	public static String login(String user, String pass, String regID) {
 		Log.i(TAG, "login device " + regID);
@@ -58,14 +58,15 @@ public class ServerUtilities {
 
 	}
 
-	public static boolean logOut(int user_id, String regID) {
+	public static boolean logOut(int user_id, String regID, String access) {
 		Err = "";
 		if (network_check) {
 			Log.i(TAG, "logOut device " + regID);
 			String serverUrl = SERVER_URL;
 			try {
 				String url = serverUrl + "?mod=logout_reminder&user_id="
-						+ user_id + "&token=" + regID;
+						+ user_id + "&token=" + regID + "&user_access_token="
+						+ access;
 				AsyncTask<String, String, String> jsonString = new RequestTask()
 						.execute(url);
 				Log.i(TAG, "Json: " + jsonString.get());
@@ -83,15 +84,18 @@ public class ServerUtilities {
 		}
 	}
 
-	public static String getRemindData(int user_id) {
+	public static String getRemindData(int user_id, String access) {
 		Err = "";
 		if (network_check) {
 			Log.i(TAG, "get Reminder");
 			String serverUrl = SERVER_URL;
 			try {
-				String url = serverUrl + "?mod=get_reminder&user_id=" + user_id;
+				String url = serverUrl + "?mod=get_reminder&user_id=" + user_id
+						+ "&user_access_token=" + access;
+				Log.d("Serverhttp", url);
 				AsyncTask<String, String, String> jsonString = new RequestTask()
 						.execute(url);
+				Log.d("Server", jsonString.get());
 				return jsonString.get();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -104,7 +108,8 @@ public class ServerUtilities {
 		}
 	}
 
-	public static boolean complete(reminderData remind, int user_id) {
+	public static boolean complete(reminderData remind, int user_id,
+			String access) {
 		/*
 		 * http://bms.altamedia.vn/api.php?mod=reminder_action
 		 * 
@@ -119,7 +124,7 @@ public class ServerUtilities {
 				String url = serverUrl
 						+ "?mod=reminder_action&action=complete&user_id="
 						+ user_id + "&id=" + remind.getID() + "&type="
-						+ remind.getType();
+						+ remind.getType() + "&user_access_token=" + access;
 				AsyncTask<String, String, String> jsonString = new RequestTask()
 						.execute(url);
 				Log.i(TAG, "Url: " + url);

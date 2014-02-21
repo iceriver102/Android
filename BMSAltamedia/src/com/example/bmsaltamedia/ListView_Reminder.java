@@ -69,7 +69,6 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 	public static reminderArrayAdapter adapter = null;
 	ListView listView = null;
 	private MySQLiteHelper db;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,22 +76,22 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		setContentView(R.layout.main_view_reminder);
 		context = this;
 		registerReceiver(mHandleMessageReceiver, new IntentFilter(
-				DISPLAY_MESSAGE_ACTION));
+				GCMIntentService.DISPLAY_MESSAGE_ACTION));
 		try {
 			db = new MySQLiteHelper(this);
 			List<userData> tmp = db.getAllUsers();
 			user = tmp.get(0);
+			dataAppSave.savePreferences(context, "access_token", user.access_token);
 			Log.i("curent User ", user.toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		Button btn_logOut = (Button) findViewById(R.id.btn_logOut);
 		btn_logOut.setOnClickListener(this);
 		Button btn_refresh = (Button) findViewById(R.id.btn_refesh);
 		btn_refresh.setOnClickListener(this);
 		CommonUtilities.flag_login = GCMIntentService.flag = true;
-
+		
 		listView = (ListView) this.findViewById(R.id.ListReminder);
 		arrReminder = new ArrayList<reminderData>();
 		adapter = new reminderArrayAdapter(this, R.layout.item_listview,
@@ -139,7 +138,7 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 
 	public void httpGetData() {
 		// Log.e("static","save data base");
-		String jsonStr = ServerUtilities.getRemindData(user.user_id);
+		String jsonStr = ServerUtilities.getRemindData(user.user_id,user.access_token);
 		db.emptyReminder();
 		if (jsonStr != null) {
 			try {
@@ -250,8 +249,8 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			if (fur_size > 0) {
 				reminderData title = new reminderData(
 						this.getString(R.string.title_group_next) + " "
-								+ strDate,
-						this.getResources().getColor(R.color.color_upcomming));
+								+ strDate, this.getResources().getColor(
+								R.color.color_upcomming));
 				adapter.addSeparatorItem(title);
 				for (int i = 0; i < fur_size; i++) {
 					reminderData tmp = fur_listReminder.get(i);
@@ -281,28 +280,43 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 	}
 
 	public void logOut() {
+		int mode_flag = -1;
 		ServerUtilities.network_check = this.checkNetwork();
 		stopService(new Intent(this, runRemindNotification.class));
 		if (ServerUtilities.network_check) {
 			boolean flag = ServerUtilities.logOut(user.user_id,
-					ListView_Reminder.regID);
-			dataAppSave.savePreferences(this, "login", "0");
-			dataAppSave.savePreferences(this, "user_id", "");
+					ListView_Reminder.regID,user.access_token);
+			if (flag) {
+				mode_flag = 0;
+				dataAppSave.savePreferences(context, "access_token","");
+				Log.i("Log Out", "Log out user thanh cong");
+				db.emptyUser();
+				db.emptyReminder();
+			}
 
 		} else {
 			// check internet
-			Log.i("conecttion", "Không thể kết nối internet");
-
+			mode_flag = 1;
+			dataAppSave.savePreferences(context, "log_out_id",
+					String.valueOf(user.user_id));
+			dataAppSave.savePreferences(context, "reg_id", regID);
+			startService(new Intent(this, LogoutService.class));
+			Log.e("conecttion", "Không thể kết nối internet");
+			Log.i("Log Out", "Log out user offline");
 		}
-		GCMRegistrar.unregister(this);
-		MySQLiteHelper dp = new MySQLiteHelper(this);
-		dp.emptyUser();
-		Log.i("Log Out", "Log out user ");
-		GCMIntentService.flag = CommonUtilities.flag_login = false;
-		// GCMRegistrar.unregister(context);
-		Intent i = new Intent(ListView_Reminder.this, MainActivity.class);
-		startActivity(i);
-		this.finish();
+		if (mode_flag != -1) {			
+			dataAppSave.savePreferences(this, "login", "0");
+			dataAppSave.savePreferences(this, "user_id", "");
+			GCMRegistrar.unregister(this);
+			GCMIntentService.flag = CommonUtilities.flag_login = false;
+			// GCMRegistrar.unregister(context);
+			Intent i = new Intent(ListView_Reminder.this, MainActivity.class);
+			startActivity(i);
+			this.finish();
+		}else{
+			Toast.makeText(context, "ERR 101: Bạn không thể đăng xuất", Toast.LENGTH_LONG).show();
+			Log.e("Err logout","user_id"+user.user_id+", regid:"+regID);
+		}
 	}
 
 	public void ConfirmDialogLogout() {
@@ -359,6 +373,7 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			WakeLocker.acquire(getApplicationContext());
 			if (ListView_Reminder.this != null) {
 				ListView_Reminder.this.httpGetData();
+				Log.i("updateSql","update database");
 			}
 
 			// Showing received message
@@ -369,10 +384,12 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 							.getRunningTasks(1).get(0).topActivity
 							.getPackageName())) {
 				// App is not in the foreground
-				ListView_Reminder.this.loadData();
+				httpGetData();Log.i("updateSql","update database");
+				//loadData();Log.i("view","update view");
 
 			} else {
-				ListView_Reminder.this.loadData();
+				loadData();
+				Log.i("view","update view 1");
 			}
 
 			// Releasing wake lock

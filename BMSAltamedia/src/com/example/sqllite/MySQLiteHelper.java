@@ -32,7 +32,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		// SQL statement to create book table
 		String CREATE_USER_TABLE = "CREATE TABLE user ( "
 				+ "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "user_id TEXT, "
-				+ "user TEXT, " + "fullName TEXT, " + "pass TEXT, "
+				+ "user TEXT, "+"user_access_token TEXT," + "fullName TEXT, " + "pass TEXT, "
 				+ "Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP )";
 		// create books table
 		db.execSQL(CREATE_USER_TABLE);
@@ -43,7 +43,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 				+ "status TINYINT," + "canComplete TINYINT,"
 				+ "date DATETIME DEFAULT CURRENT_TIMESTAMP )";
 		db.execSQL(CREATE_REMIND_TABLE);
-
 	}
 
 	@Override
@@ -60,6 +59,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String TABLE_USER = "user";
 
 	// Books Table Columns names
+	private static final String KEY_ACESS="user_access_token";
 	private static final String KEY_ID = "id";
 	private static final String KEY_USER_ID = "user_id";
 	private static final String KEY_USER = "user";
@@ -67,18 +67,53 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String KEY_FULLNAME = "fullName";
 	private static final String KEY_TIME = "Timestamp";
 
-	private static final String[] COLUMNS = { KEY_ID, KEY_USER_ID, KEY_USER,
+	private static final String[] COLUMNS = { KEY_ID, KEY_USER_ID, KEY_USER,KEY_ACESS,
 			KEY_FULLNAME, KEY_PASS, KEY_TIME };
+
+	public userData checkLogin(String username, String pass) {
+		// 1. get reference to readable DB
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		// 2. build query
+		Cursor cursor = db.query(TABLE_USER, // a. table
+				COLUMNS, // b. column names
+				" pass = ? and user=?", // c. selections
+				new String[] { pass, username }, // d. selections args
+				null, // e. group by
+				null, // f. having
+				null, // g. order by
+				null); // h. limit
+		Log.d("Sql",cursor.getCount()+"");
+		// 3. if we got results get the first one
+		if (cursor != null&&cursor.getCount()==1) {
+			cursor.moveToFirst();
+			// 4. build book object
+			userData user = new userData();
+			user.setId(Integer.parseInt(cursor.getString(0)));
+			user.user_id = Integer.parseInt(cursor.getString(1));
+			user.setUserName(cursor.getString(2));
+			user.access_token=cursor.getString(3);
+			user.fullName = cursor.getString(4);
+			user.setPass(cursor.getString(5));
+			user.setDate(cursor.getString(6), "dd/MM/yyyy");
+			db.close();
+			return user;
+		}else{
+			db.close();
+			return null;
+		}		
+	}
 
 	public void addUser(userDataJson user) {
 		Log.d("addBook", user.toString());
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
-
 		// 2. create ContentValues to add key "column"/value
 		ContentValues values = new ContentValues();
+		
 		values.put(KEY_USER_ID, user.getUserId());
 		values.put(KEY_USER, user.getUserName());
+		values.put(KEY_ACESS, user.access_token);
 		values.put(KEY_FULLNAME, user.getFullName());
 		values.put(KEY_PASS, user.getPass());
 
@@ -90,6 +125,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 		// 4. close
 		db.close();
+		Log.i("userJson", user.toString());
 	}
 
 	public void addUser(userData user) {
@@ -98,7 +134,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		// 2. create ContentValues to add key "column"/value
+		
 		ContentValues values = new ContentValues();
+		values.put(KEY_ACESS, user.access_token);
 		values.put(KEY_USER_ID, user.user_id);
 		values.put(KEY_USER, user.getUserName());
 		values.put(KEY_FULLNAME, user.fullName);
@@ -156,9 +194,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		user.setId(Integer.parseInt(cursor.getString(0)));
 		user.user_id = Integer.parseInt(cursor.getString(1));
 		user.setUserName(cursor.getString(2));
-		user.fullName = cursor.getString(3);
-		user.setPass(cursor.getString(4));
-		user.setDate(cursor.getString(5), "dd/MM/yyyy");
+		user.access_token=cursor.getString(3);
+		user.fullName = cursor.getString(4);
+		user.setPass(cursor.getString(5));
+		user.setDate(cursor.getString(6), "dd/MM/yyyy");
 
 		Log.d("getUser(" + id + ")", user.toString());
 		db.close();
@@ -185,9 +224,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 				user.setId(Integer.parseInt(cursor.getString(0)));
 				user.user_id = Integer.parseInt(cursor.getString(1));
 				user.setUserName(cursor.getString(2));
-				user.fullName = cursor.getString(3);
-				user.setPass(cursor.getString(4));
-				user.setDate(cursor.getString(5), "yyyy-MM-dd hh:mm:ss");
+				user.access_token=cursor.getString(3);
+				user.fullName = cursor.getString(4);
+				user.setPass(cursor.getString(5));
+				user.setDate(cursor.getString(6), "yyyy-MM-dd hh:mm:ss");
 				Log.d("getUer(" + user.user_id + ")", user.toString());
 
 				// Add book to books
@@ -385,18 +425,18 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public int CountReminder(Date date) {
 		Format formatter = new SimpleDateFormat("yyyyMMdd");
 		String dateStr = formatter.format(date);
-		
+
 		int num = 0;
 		List<reminderData> listReminder = getAllReminder();
 		int size = listReminder.size();
 		for (int i = 0; i < size; i++) {
 			reminderData tmp = listReminder.get(i);
-			Log.e("skfhl",tmp.getDate("dd/MM/yyyy")+"<->"+dateStr);
-			if (tmp.getDate("yyyyMMdd").compareTo(dateStr)<=0) {
+			Log.e("skfhl", tmp.getDate("dd/MM/yyyy") + "<->" + dateStr);
+			if (tmp.getDate("yyyyMMdd").compareTo(dateStr) <= 0) {
 				num++;
 			}
 		}
-		Log.e("num",""+num);
+		Log.e("num", "" + num);
 		return num;
 	}
 

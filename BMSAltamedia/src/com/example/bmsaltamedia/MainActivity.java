@@ -16,6 +16,7 @@ import com.example.sqllite.MySQLiteHelper;
 import com.google.GCM.CommonUtilities;
 import com.google.GCM.ServerUtilities;
 import com.google.GCM.WakeLocker;
+import com.google.GCM.dataAppSave;
 import com.google.android.gcm.GCMRegistrar;
 
 import android.net.ConnectivityManager;
@@ -46,6 +47,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public static String newAction = "";
 	private String regId;
+	MySQLiteHelper db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		// Make sure the manifest was properly set - comment out this line
 		// while developing the app, then uncomment it when it's ready.
 		// GCMRegistrar.checkManifest(this);
-
+		db = new MySQLiteHelper(this);
 		registerReceiver(mHandleMessageReceiver, new IntentFilter(
 				DISPLAY_MESSAGE_ACTION));
 		regId = GCMRegistrar.getRegistrationId(this);
@@ -73,7 +75,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				protected Void doInBackground(Void... params) {
 					// Register on our server
 					// On server creates a new user
-					//ServerUtilities.register(context, "", "", regId);
+					// ServerUtilities.register(context, "", "", regId);
 					return null;
 				}
 
@@ -157,7 +159,6 @@ public class MainActivity extends Activity implements OnClickListener {
 					userDataJson userJson = new userDataJson(jsonString,
 							username, pass);
 					if (userJson.result) {
-						MySQLiteHelper db = new MySQLiteHelper(this);
 						db.addUser(userJson);
 						Log.i("dang nhap", userJson.toString());
 						GCMIntentService.flag = CommonUtilities.flag_login = true;
@@ -173,8 +174,26 @@ public class MainActivity extends Activity implements OnClickListener {
 						Log.e("dang nhap ERR", userJson.toString());
 					}
 				}
+			} else if (!dataAppSave.loadSavedPreferences(this, "log_out_id")
+					.equals("")) {
+				userData user = db.checkLogin(username, pass);
+				if (user != null) {
+					Log.i("dang nhap", "dang nhap offline");
+					GCMIntentService.flag = CommonUtilities.flag_login = true;
+					Intent i = new Intent(MainActivity.this,
+							ListView_Reminder.class);
+					startActivity(i);
+					ListView_Reminder.regID = regId;
+					this.finish();
+					stopService(new Intent(this, LogoutService.class));
+				} else {
+					Toast.makeText(this, this.getString(R.string.Err_login),
+							Toast.LENGTH_LONG).show();
+					Log.e("dang nhap ERR", "dang nhap offline that bai");
+				}
+
 			} else {
-				Toast.makeText(this, "Không có kết nối internet!",
+				Toast.makeText(this, this.getString(R.string.Err_404),
 						Toast.LENGTH_LONG).show();
 			}
 			break;
