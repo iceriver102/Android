@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="5dip" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dip" 
+        android:background="@drawable/item_listview_background">
+        <CheckBox
+            android:id="@+id/item_checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:button="@drawable/checkbox_selector"
+            android:layout_marginLeft="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:baselineAligned="@color/color_orange"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/item_txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/color_orange"
+                android:textSize="16sp"
+                android:text="Phan thanh giang"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/item_txtContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:text=""
+                android:textColor="#3f4c6b"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="0dp" >
+
+                    <TextView
+                        android:id="@+id/item_txt_Date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="3dp"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/color_orange"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>       
+    </LinearLayout>
+</LinearLayout>

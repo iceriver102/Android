@@ -66,12 +66,12 @@ public final class R {
         public static final int btn_logOut=0x7f09000d;
         public static final int btn_refesh=0x7f09000c;
         public static final int btnlogin=0x7f090004;
-        public static final int imgLogo=0x7f090000;
+        public static final int imgLogo=0x7f090001;
         public static final int item_checkBox=0x7f090006;
         public static final int item_txtContent=0x7f090008;
         public static final int item_txtTitle=0x7f090007;
         public static final int item_txt_Date=0x7f090009;
-        public static final int layoutInput=0x7f090001;
+        public static final int layoutInput=0x7f090000;
         public static final int layoutMain=0x7f09000a;
         public static final int textView1=0x7f090005;
         public static final int title_item=0x7f09000f;
