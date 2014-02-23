@@ -21,9 +21,9 @@ public final class R {
         public static final int blue=0x7f04000f;
         public static final int color_black=0x7f040007;
         public static final int color_curent=0x7f040012;
-        public static final int color_last_remender=0x7f040013;
+        public static final int color_last_remender=0x7f040011;
         public static final int color_orange=0x7f040008;
-        public static final int color_upcomming=0x7f040011;
+        public static final int color_upcomming=0x7f040013;
         public static final int color_white=0x7f040006;
         public static final int custom_theme_color=0x7f040009;
         public static final int gray=0x7f04000b;
@@ -55,14 +55,17 @@ public final class R {
         public static final int ic_log_out=0x7f020009;
         public static final int item_listview_background=0x7f02000a;
         public static final int logo=0x7f02000b;
-        public static final int nav_shadow=0x7f02000c;
-        public static final int title_backgound=0x7f02000d;
-        public static final int txt_pass_backdground=0x7f02000e;
-        public static final int txt_user_background=0x7f02000f;
+        public static final int logo_background=0x7f02000c;
+        public static final int nav_shadow=0x7f02000d;
+        public static final int rotate_around_center_point=0x7f02000e;
+        public static final int title_backgound=0x7f02000f;
+        public static final int txt_pass_backdground=0x7f020010;
+        public static final int txt_user_background=0x7f020011;
     }
     public static final class id {
         public static final int ListReminder=0x7f09000e;
-        public static final int action_settings=0x7f090011;
+        public static final int action_settings=0x7f090013;
+        public static final int bgTransparent=0x7f09000f;
         public static final int btn_logOut=0x7f09000d;
         public static final int btn_refesh=0x7f09000c;
         public static final int btnlogin=0x7f090004;
@@ -72,13 +75,14 @@ public final class R {
         public static final int item_txtTitle=0x7f090007;
         public static final int item_txt_Date=0x7f090009;
         public static final int layoutInput=0x7f090000;
-        public static final int layoutMain=0x7f09000a;
+        public static final int layoutMain=0x7f090010;
+        public static final int layoutTitle=0x7f09000a;
         public static final int textView1=0x7f090005;
-        public static final int title_item=0x7f09000f;
+        public static final int title_item=0x7f090011;
         public static final int txtPass=0x7f090003;
         public static final int txtTitle=0x7f09000b;
         public static final int txtUser=0x7f090002;
-        public static final int txt_title_group=0x7f090010;
+        public static final int txt_title_group=0x7f090012;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -110,8 +114,8 @@ public final class R {
         public static final int place_user_name=0x7f06000d;
         public static final int place_user_pass=0x7f06000e;
         public static final int title_dialog_logout=0x7f060012;
-        public static final int title_group_last=0x7f060015;
-        public static final int title_group_next=0x7f060016;
+        public static final int title_group=0x7f060015;
+        public static final int title_group_today=0x7f060016;
         public static final int user_name=0x7f060009;
         public static final int user_pass=0x7f06000a;
         public static final int work_wait_title=0x7f060014;

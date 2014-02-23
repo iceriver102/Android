@@ -96,6 +96,7 @@ public class ServerUtilities {
 				AsyncTask<String, String, String> jsonString = new RequestTask()
 						.execute(url);
 				Log.d("Server", jsonString.get());
+				Log.i("URL",url);
 				return jsonString.get();
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -9,6 +9,8 @@ import com.altamedia.bmsaltamedia.ListView_Reminder;
 import com.altamedia.bmsaltamedia.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,8 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 	private static final int TYPE_SEPARATOR = 1;
 	private static final int TYPE_MAX_COUNT = 2;
 	private TreeSet<Integer> mSeparatorsSet = new TreeSet<Integer>();
+	private reminderData tmpRemind;
+	private View view;
 
 	public reminderArrayAdapter(Activity context, int layoutId,
 			ArrayList<reminderData> arr) {
@@ -95,31 +99,42 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 				item_btn.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
 						CheckBox cb = (CheckBox) v;
-						reminderData remind = (reminderData) cb.getTag();
-						int index = myArray.indexOf(remind);
+						view=v;
+						tmpRemind = (reminderData) cb.getTag();
+						int index = myArray.indexOf(tmpRemind);
 						Log.d("remiderData", Integer.toString(index) + " "
-								+ remind.toString());
-
+								+ tmpRemind.toString());
 						if (cb.isChecked()) {
-							boolean flag = ServerUtilities.complete(remind,
-									ListView_Reminder.user.user_id,
-									ListView_Reminder.user.access_token);
-							Log.d("flag", flag + "");
-							if (flag) {
-								GCMIntentService.reLoadLayout(context);
-							} else if (ServerUtilities.Err != "") {
-								cb.setChecked(false);
-								Toast.makeText(
-										v.getContext(),
-										v.getContext().getString(
-												R.string.Err_complete),
-										Toast.LENGTH_LONG).show();
-								Log.e("complete", ServerUtilities.Err);
-							} else {
-								Log.e("complete", "khong the complete");
-							}
+							
+							AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+							builder1.setMessage("Bạn có muốn hoàn thành công việc này không?");
+							builder1.setCancelable(true);
+							//builder1.setIcon(R.drawable.ic_log_out);
+							builder1.setTitle("Hoàn thành công việc");
+
+							builder1.setPositiveButton("Yes",
+									new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog, int id) {
+											dialog.cancel();
+											complete(view, tmpRemind);
+											
+											// flag=true;
+										}
+									});
+							builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dialog.cancel();
+									
+									// flag=false;
+								}
+							});
+
+							AlertDialog alert11 = builder1.create();
+							alert11.show();
+							cb.setChecked(false);
+							//complete(v,remind);														
 						} else {
-							remind.setStatus(0);
+							tmpRemind.setStatus(0);
 						}
 
 					}
@@ -142,7 +157,27 @@ public class reminderArrayAdapter extends ArrayAdapter<reminderData> {
 		// Vì View là Object là dạng tham chiếu đối tượng, nên
 		// m�?i sự thay đổi của các object bên trong convertView
 		// thì nó cũng biết sự thay đổi đó
-		return convertView;// trả v�? View này, tức là trả luôn
-							// v�? các thông số mới mà ta vừa thay đổi
+		return convertView;
+	}
+	public void complete(View v,reminderData remind ){
+		CheckBox cb = (CheckBox) v;
+		
+		boolean flag = ServerUtilities.complete(remind,
+				ListView_Reminder.user.user_id,
+				ListView_Reminder.user.access_token);
+		Log.d("flag", flag + "");
+		if (flag) {
+			GCMIntentService.reLoadLayout(context);
+		} else if (ServerUtilities.Err != "") {
+			cb.setChecked(false);
+			Toast.makeText(
+					v.getContext(),
+					v.getContext().getString(
+							R.string.Err_complete),
+					Toast.LENGTH_LONG).show();
+			Log.e("complete", ServerUtilities.Err);
+		} else {
+			Log.e("complete", "khong the complete");
+		}
 	}
 }

@@ -141,10 +141,11 @@ public class MainActivity extends Activity implements OnClickListener {
 					regId = GCMRegistrar.getRegistrationId(this);
 					Log.d("register", "start register");
 				}
+				Log.e("Reg Id",regId);
 				if (regId.equals("")) {
 					Toast.makeText(this, this.getString(R.string.Err_101),
 							Toast.LENGTH_LONG).show();
-					// regId = GCMRegistrar.getRegistrationId(this);
+					 regId = GCMRegistrar.getRegistrationId(this);
 					// Log.e("try again Reg Id",regId);
 				} else {
 					String jsonString = ServerUtilities.login(username, pass,

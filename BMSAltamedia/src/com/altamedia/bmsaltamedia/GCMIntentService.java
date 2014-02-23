@@ -1,7 +1,6 @@
 package com.altamedia.bmsaltamedia;
 
-import static com.altamedia.GCM.CommonUtilities.SENDER_ID;
-import static com.altamedia.GCM.CommonUtilities.displayMessage;
+import static com.altamedia.GCM.CommonUtilities.SENDER_ID; 
 
 import java.util.Iterator;
 import java.util.List;

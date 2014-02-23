@@ -1,6 +1,7 @@
 package com.altamedia.appData;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import java.text.Format;
 import java.text.ParseException;
@@ -102,6 +103,13 @@ public class reminderData {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public int CompareDate(reminderData remind){
+		String tmp=this.getDate("yyyyMMdd");
+		String tmp1=remind.getDate("yyyyMMdd");
+		Log.i("Compare","tmp: "+tmp+",tmp1: "+tmp1);
+		return tmp.compareTo(tmp1);
 	}
 
 	public Date getDate() {

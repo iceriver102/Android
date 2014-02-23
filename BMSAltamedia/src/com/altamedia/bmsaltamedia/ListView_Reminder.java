@@ -2,6 +2,7 @@
  * 
  */
 package com.altamedia.bmsaltamedia;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import com.altamedia.GCM.ServerUtilities;
 import com.altamedia.GCM.WakeLocker;
 import com.altamedia.GCM.dataAppSave;
 import com.altamedia.Json.reminderDataJson;
+import com.altamedia.appData.groupReminder;
 import com.altamedia.appData.reminderArrayAdapter;
 import com.altamedia.appData.reminderData;
 import com.altamedia.appData.userData;
@@ -38,11 +40,17 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +72,7 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 	public static reminderArrayAdapter adapter = null;
 	ListView listView = null;
 	private MySQLiteHelper db;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -76,18 +85,22 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			db = new MySQLiteHelper(this);
 			List<userData> tmp = db.getAllUsers();
 			user = tmp.get(0);
-			dataAppSave.savePreferences(context, "access_token", user.access_token);
-			Toast.makeText(context, this.getString(R.string.hello_title)+" "+ user.fullName+"!", Toast.LENGTH_LONG).show();
+			dataAppSave.savePreferences(context, "access_token",
+					user.access_token);
+			Toast.makeText(
+					context,
+					this.getString(R.string.hello_title) + " " + user.fullName
+							+ "!", Toast.LENGTH_LONG).show();
 			Log.i("curent User ", user.toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		Button btn_logOut = (Button) findViewById(R.id.btn_logOut);
 		btn_logOut.setOnClickListener(this);
-		Button btn_refresh = (Button) findViewById(R.id.btn_refesh);
+		ImageView btn_refresh = (ImageView) findViewById(R.id.btn_refesh);
 		btn_refresh.setOnClickListener(this);
 		CommonUtilities.flag_login = GCMIntentService.flag = true;
-		
+
 		listView = (ListView) this.findViewById(R.id.ListReminder);
 		arrReminder = new ArrayList<reminderData>();
 		adapter = new reminderArrayAdapter(this, R.layout.item_listview,
@@ -99,6 +112,28 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		dataAppSave.savePreferences(this, "login", "1");
 		dataAppSave.savePreferences(this, "user_id",
 				String.valueOf(user.user_id));
+
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		int height = displaymetrics.heightPixels;
+		int width = displaymetrics.widthPixels;
+		ImageView img_tran = (ImageView) findViewById(R.id.bgTransparent);
+		// img_tran.getHeight();
+		int left_margin = width / 2 - 150;
+		int top_margin = height / 2 - 150;
+		int right_margin = width / 2 + 150;
+		int bottom_margin = height / 2 + 150;
+		Log.i("Screen", width + "," + height);
+		// image = (ImageView) findViewById(R.id.imageID);
+		MarginLayoutParams marginParams = new MarginLayoutParams(
+				img_tran.getLayoutParams());
+	/*	marginParams.setMargins(left_margin, top_margin, right_margin,
+				bottom_margin);*/
+		marginParams.setMargins(left_margin, top_margin, 10,
+				10);
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+				marginParams);
+		img_tran.setLayoutParams(layoutParams);
 
 	}
 
@@ -134,7 +169,8 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 
 	public void httpGetData() {
 		// Log.e("static","save data base");
-		String jsonStr = ServerUtilities.getRemindData(user.user_id,user.access_token);
+		String jsonStr = ServerUtilities.getRemindData(user.user_id,
+				user.access_token);
 		db.emptyReminder();
 		if (jsonStr != null) {
 			try {
@@ -198,38 +234,57 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 
 	public void loadData() {
 		List<reminderData> listReminder = db.getAllReminder();
-		List<reminderData> last_listReminder;
+		// List<reminderData> last_listReminder;
 		// List<reminderData> cur_listReminder;
-		List<reminderData> fur_listReminder;
+		// List<reminderData> fur_listReminder;
 		Date dateNow = new Date();
-		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Format formatter = new SimpleDateFormat("yyyyMMdd");
 		String strDate = formatter.format(dateNow);
-		last_listReminder = this.Where(dateNow, -1, listReminder);
+		// last_listReminder = this.Where(dateNow, -1, listReminder);
 		// cur_listReminder= this.Where(new Date(), 0, listReminder);
-		fur_listReminder = this.Where(dateNow, 1, listReminder);
-
-		Log.e("check", "last:" + last_listReminder.size() + ", fur:"
-				+ fur_listReminder.size());
+		// fur_listReminder = this.Where(dateNow, 1, listReminder);
+		// Log.e("check", "last:" + last_listReminder.size() + ", fur:"
+		// + fur_listReminder.size());
 
 		adapter.clear();
 		int size = listReminder.size();
+		Log.i("Size list", "size:" + size);
 		if (size > 0) {
-			int lastSize = last_listReminder.size();
-			if (lastSize > 0) {
-				reminderData title = new reminderData(
-						this.getString(R.string.title_group_last)
-								+ " "
-								+ last_listReminder.get(0)
-										.getDate("dd/MM/yyyy"), this
-								.getResources().getColor(
-										R.color.color_last_remender));
-				adapter.addSeparatorItem(title);
-				for (int i = 0; i < lastSize; i++) {
-					reminderData tmp = last_listReminder.get(i);
-					adapter.add(tmp);
+			List<groupReminder> group = new ArrayList<groupReminder>();
+			while (size > 0) {
+				int i = 0;
+				reminderData remind = listReminder.get(0);
+				groupReminder tmpGroup = new groupReminder();
+				tmpGroup.data.add(remind);
+				tmpGroup.title = remind.getDate("dd/MM/yyyy");
+				tmpGroup.date=remind.getDate("yyyyMMdd");
+				listReminder.remove(0);
+				size = listReminder.size();
+				while (i < size) {
+					if (remind.CompareDate(listReminder.get(i)) == 0) {
+						tmpGroup.data.add(listReminder.get(i));
+						listReminder.remove(i);
+						size = listReminder.size();
+						Log.i("Size --", "index:" + i + " ,-size:" + size);
+					} else {
+						i++;
+						Log.i("Size", "index:" + i + " ,size:" + size);
+					}
 				}
-
+				group.add(tmpGroup);
 			}
+			/*
+			 * int lastSize = last_listReminder.size(); if (lastSize > 0) {
+			 * reminderData title = new reminderData(
+			 * this.getString(R.string.title_group_last) + " " +
+			 * last_listReminder.get(0) .getDate("dd/MM/yyyy"), this
+			 * .getResources().getColor( R.color.color_last_remender));
+			 * adapter.addSeparatorItem(title); for (int i = 0; i < lastSize;
+			 * i++) { reminderData tmp = last_listReminder.get(i);
+			 * adapter.add(tmp); }
+			 */
+
+			// }
 			/*
 			 * int cur_size= cur_listReminder.size(); if(cur_size>0){
 			 * reminderData title= new
@@ -240,22 +295,54 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			 * 
 			 * }
 			 */
-			int fur_size = fur_listReminder.size();
-			if (fur_size > 0) {
-				reminderData title = new reminderData(
-						this.getString(R.string.title_group_next) + " "
-								+ strDate, this.getResources().getColor(
-								R.color.color_upcomming));
-				adapter.addSeparatorItem(title);
-				for (int i = 0; i < fur_size; i++) {
-					reminderData tmp = fur_listReminder.get(i);
-					adapter.add(tmp);
+			/*
+			 * int fur_size = fur_listReminder.size(); if (fur_size > 0) {
+			 * reminderData title = new reminderData(
+			 * this.getString(R.string.title_group_next) + " " + strDate,
+			 * this.getResources().getColor( R.color.color_upcomming));
+			 * adapter.addSeparatorItem(title); for (int i = 0; i < fur_size;
+			 * i++) { reminderData tmp = fur_listReminder.get(i);
+			 * adapter.add(tmp); }
+			 * 
+			 * }
+			 */
+			int gSize = group.size();
+			Log.i("Size", gSize + "");
+			if (gSize > 0) {
+				for (int j = 0; j < gSize; j++) {
+					groupReminder tmp = group.get(j);
+					if (tmp.date.compareTo(strDate)==0) {
+						reminderData title = new reminderData(
+								this.getString(R.string.title_group_today)
+										+ " " + tmp.title, this.getResources()
+										.getColor(R.color.color_curent));
+						adapter.addSeparatorItem(title);
+					}else if(tmp.date.compareTo(strDate)>0){						
+						reminderData title = new reminderData(
+								this.getString(R.string.title_group) + " "
+										+ tmp.title, this.getResources()
+										.getColor(R.color.color_upcomming));
+						adapter.addSeparatorItem(title);
+					}else{
+						reminderData title = new reminderData(
+								this.getString(R.string.title_group) + " "
+										+ tmp.title, this.getResources()
+										.getColor(R.color.color_last_remender));
+						adapter.addSeparatorItem(title);
+					}
+					int count = tmp.count();
+					for (int i = 0; i < count; i++) {
+						reminderData tmpR = tmp.data.get(i);
+						adapter.add(tmpR);
+					}
 				}
-
+			} else {
+				Log.e("ERR", "njglksajgsjal");
 			}
-		}else{
-			Toast.makeText(context, this.getString(R.string.empty_reminder), Toast.LENGTH_LONG).show();
-			Log.d("Reminder","không có công viêc");
+		} else {
+			Toast.makeText(context, this.getString(R.string.empty_reminder),
+					Toast.LENGTH_LONG).show();
+			Log.d("Reminder", "không có công viêc");
 		}
 		adapter.notifyDataSetChanged();
 		Log.e("layout", "reload layout");
@@ -269,6 +356,11 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			ConfirmDialogLogout();
 			break;
 		case R.id.btn_refesh:
+			ImageView animationTarget = (ImageView) this
+					.findViewById(R.id.btn_refesh);
+			Animation animation = AnimationUtils.loadAnimation(this,
+					R.drawable.rotate_around_center_point);
+			animationTarget.startAnimation(animation);
 			this.getData();
 			this.loadData();
 			break;
@@ -283,10 +375,10 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		stopService(new Intent(this, runRemindNotification.class));
 		if (ServerUtilities.network_check) {
 			boolean flag = ServerUtilities.logOut(user.user_id,
-					ListView_Reminder.regID,user.access_token);
+					ListView_Reminder.regID, user.access_token);
 			if (flag) {
 				mode_flag = 0;
-				dataAppSave.savePreferences(context, "access_token","");
+				dataAppSave.savePreferences(context, "access_token", "");
 				Log.i("Log Out", "Log out user thanh cong");
 				db.emptyUser();
 				db.emptyReminder();
@@ -302,7 +394,7 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			Log.e("conecttion", "Không thể kết nối internet");
 			Log.i("Log Out", "Log out user offline");
 		}
-		if (mode_flag != -1) {			
+		if (mode_flag != -1) {
 			dataAppSave.savePreferences(this, "login", "0");
 			dataAppSave.savePreferences(this, "user_id", "");
 			GCMRegistrar.unregister(this);
@@ -311,9 +403,10 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			Intent i = new Intent(ListView_Reminder.this, MainActivity.class);
 			startActivity(i);
 			this.finish();
-		}else{
-			Toast.makeText(context, "ERR 101: Bạn không thể đăng xuất", Toast.LENGTH_LONG).show();
-			Log.e("Err logout","user_id"+user.user_id+", regid:"+regID);
+		} else {
+			Toast.makeText(context, "ERR 101: Bạn không thể đăng xuất",
+					Toast.LENGTH_LONG).show();
+			Log.e("Err logout", "user_id" + user.user_id + ", regid:" + regID);
 		}
 	}
 
@@ -371,7 +464,7 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			WakeLocker.acquire(getApplicationContext());
 			if (ListView_Reminder.this != null) {
 				ListView_Reminder.this.httpGetData();
-				Log.i("updateSql","update database");
+				Log.i("updateSql", "update database");
 			}
 
 			// Showing received message
@@ -382,12 +475,13 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 							.getRunningTasks(1).get(0).topActivity
 							.getPackageName())) {
 				// App is not in the foreground
-				httpGetData();Log.i("updateSql","update database");
-				//loadData();Log.i("view","update view");
+				httpGetData();
+				Log.i("updateSql", "update database");
+				// loadData();Log.i("view","update view");
 
 			} else {
 				loadData();
-				Log.i("view","update view 1");
+				Log.i("view", "update view 1");
 			}
 
 			// Releasing wake lock

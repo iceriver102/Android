@@ -16,8 +16,8 @@
     <string name="title_dialog_logout">Đăng xuất</string>
     <string name="empty_reminder">Không có công việc chưa hoàn thành!</string>
     <string name="work_wait_title">BMS Reminder</string>
-    <string name="title_group_last">Công việc quá hạn</string>
-     <string name="title_group_next">Công việc hôm nay</string>
+    <string name="title_group">Công việc ngày</string>
+     <string name="title_group_today">Công việc ngày hôm nay</string>
       <string name="hello_title">Xin chào</string>
 
 </resources>

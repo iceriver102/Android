@@ -1,0 +1,8 @@
+package com.altamedia.appData;
+
+import java.util.List;
+
+public class groupReminder {
+	List<reminderData> data;
+	String title;
+}
