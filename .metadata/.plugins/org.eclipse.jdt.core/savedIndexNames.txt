@@ -7,7 +7,6 @@ INDEX VERSION 1.126+D:\thanh giang\Android\.metadata\.plugins\org.eclipse.jdt.co
 1531412002.index
 3273202697.index
 1213280289.index
-1276772013.index
 1768105010.index
 2894386605.index
 861992799.index

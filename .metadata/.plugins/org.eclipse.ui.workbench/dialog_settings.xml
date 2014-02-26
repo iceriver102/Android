@@ -14,7 +14,7 @@
 		</list>
 	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="1025" key="dialogWidth"/>
+		<item value="1020" key="dialogWidth"/>
 		<item value="525" key="dialogHeight"/>
 		<list key="orderedProviders">
 		</list>
