@@ -160,8 +160,6 @@ public class MainActivity extends Activity implements OnClickListener {
 								ListView_Reminder.class);
 						startActivity(i);
 						ListView_Reminder.regID = regId;
-						dataAppSave.savePreferences(this, "regId",
-								regId);
 						dataAppSave.savePreferences(this, "access_token",
 								userJson.access_token);
 						this.finish();

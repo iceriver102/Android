@@ -92,9 +92,6 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 			Log.i("curent User ", user.toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		}finally{
-			user.access_token=dataAppSave.loadSavedPreferences(context, "access_token");
-			regID=dataAppSave.loadSavedPreferences(context, "regId");
 		}
 		Button btn_logOut = (Button) findViewById(R.id.btn_logOut);
 		btn_logOut.setOnClickListener(this);
@@ -235,9 +232,18 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 
 	public void loadData() {
 		List<reminderData> listReminder = db.getAllReminder();
+		// List<reminderData> last_listReminder;
+		// List<reminderData> cur_listReminder;
+		// List<reminderData> fur_listReminder;
 		Date dateNow = new Date();
 		Format formatter = new SimpleDateFormat("yyyyMMdd");
 		String strDate = formatter.format(dateNow);
+		// last_listReminder = this.Where(dateNow, -1, listReminder);
+		// cur_listReminder= this.Where(new Date(), 0, listReminder);
+		// fur_listReminder = this.Where(dateNow, 1, listReminder);
+		// Log.e("check", "last:" + last_listReminder.size() + ", fur:"
+		// + fur_listReminder.size());
+
 		adapter.clear();
 		int size = listReminder.size();
 		Log.i("Size list", "size:" + size);
@@ -265,7 +271,39 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 				}
 				group.add(tmpGroup);
 			}
-			
+			/*
+			 * int lastSize = last_listReminder.size(); if (lastSize > 0) {
+			 * reminderData title = new reminderData(
+			 * this.getString(R.string.title_group_last) + " " +
+			 * last_listReminder.get(0) .getDate("dd/MM/yyyy"), this
+			 * .getResources().getColor( R.color.color_last_remender));
+			 * adapter.addSeparatorItem(title); for (int i = 0; i < lastSize;
+			 * i++) { reminderData tmp = last_listReminder.get(i);
+			 * adapter.add(tmp); }
+			 */
+
+			// }
+			/*
+			 * int cur_size= cur_listReminder.size(); if(cur_size>0){
+			 * reminderData title= new
+			 * reminderData("Công việc hôm nay",this.getResources
+			 * ().getColor(R.color.color_curent));
+			 * adapter.addSeparatorItem(title); for(int i=0;i<cur_size;i++){
+			 * reminderData tmp= cur_listReminder.get(i); adapter.add(tmp); }
+			 * 
+			 * }
+			 */
+			/*
+			 * int fur_size = fur_listReminder.size(); if (fur_size > 0) {
+			 * reminderData title = new reminderData(
+			 * this.getString(R.string.title_group_next) + " " + strDate,
+			 * this.getResources().getColor( R.color.color_upcomming));
+			 * adapter.addSeparatorItem(title); for (int i = 0; i < fur_size;
+			 * i++) { reminderData tmp = fur_listReminder.get(i);
+			 * adapter.add(tmp); }
+			 * 
+			 * }
+			 */
 			int gSize = group.size();
 			Log.i("Size", gSize + "");
 			if (gSize > 0) {

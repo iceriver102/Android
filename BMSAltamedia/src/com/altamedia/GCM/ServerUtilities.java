@@ -72,6 +72,7 @@ public class ServerUtilities {
 				Log.i(TAG, "Json: " + jsonString.get());
 				JSONObject json = new JSONObject(jsonString.get());
 				Log.i(TAG, jsonString.get());
+				Log.i("URL",url);
 				return json.getBoolean(FIELD_RESULT);
 			} catch (Exception ex) {
 				Log.e(TAG, "không thể logOut");
