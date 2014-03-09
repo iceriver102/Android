@@ -1,9 +1,9 @@
 package com.altamedia.androidgcm;
 
-import static com.google.GCM.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.google.GCM.CommonUtilities.EXTRA_ACTION;
-import static com.google.GCM.CommonUtilities.EXTRA_MESSAGE;
-import static com.google.GCM.CommonUtilities.SENDER_ID;
+import static com.alta.GCM.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static com.alta.GCM.CommonUtilities.EXTRA_ACTION;
+import static com.alta.GCM.CommonUtilities.EXTRA_MESSAGE;
+import static com.alta.GCM.CommonUtilities.SENDER_ID;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -18,8 +18,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.GCM.ServerUtilities;
-import com.google.GCM.WakeLocker;
+import com.alta.GCM.ServerUtilities;
+import com.alta.GCM.WakeLocker;
 import com.google.android.gcm.GCMRegistrar;
 
 public class MainActivity extends Activity {
@@ -41,7 +41,6 @@ public class MainActivity extends Activity {
 				+ android.os.Build.SERIAL;
 		name = str;
 		email = "thanh.le@alta.com.vn";
-
 		txt_msg = (TextView) findViewById(R.id.txt_msg);
 
 		// Get Data From Notification

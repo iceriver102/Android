@@ -41,7 +41,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 **/
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(TAG, "Device registered: regId = " + registrationId);
-		// ServerUtilities.register(context, "demo", "demo", registrationId);
+		 ServerUtilities.register(context, "demo", "demo", registrationId);
 	}
 
 	/**

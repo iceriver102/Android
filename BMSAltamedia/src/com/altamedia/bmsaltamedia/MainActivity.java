@@ -14,6 +14,7 @@ import com.altamedia.appData.userData;
 import com.altamedia.sqllite.MySQLiteHelper;
 import com.altamedia.bmsaltamedia.R;
 import com.google.android.gcm.GCMRegistrar;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -38,10 +39,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	EditText mEdit_User;
 	EditText mEdit_Pass;
 	AsyncTask<Void, Void, Void> mRegisterTask;
-
+	Context context;
 	public static String newAction = "";
 	private String regId;
 	MySQLiteHelper db;
+	//GoogleCloudMessaging  tmp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,26 +54,29 @@ public class MainActivity extends Activity implements OnClickListener {
 		GCMRegistrar.checkDevice(this);
 		// Make sure the manifest was properly set - comment out this line
 		// while developing the app, then uncomment it when it's ready.
-		// GCMRegistrar.checkManifest(this);
+		GCMRegistrar.checkManifest(this);
 		db = new MySQLiteHelper(this);
+		context=this;
 		registerReceiver(mHandleMessageReceiver, new IntentFilter(
 				DISPLAY_MESSAGE_ACTION));
-		regId = GCMRegistrar.getRegistrationId(this);
-		if (regId.equals("")) {
+		
+		GCMRegistrar.register(this, SENDER_ID);
+		regId = GCMRegistrar.getRegistrationId(context);
+		
+		if (regId.equals("")) {			
 			GCMRegistrar.register(this, SENDER_ID);
-			regId = GCMRegistrar.getRegistrationId(this);
+			regId = GCMRegistrar.getRegistrationId(context);
 
 		} else {
-
+			if (GCMRegistrar.isRegisteredOnServer(context)) {
+				Log.i("Main", "Already registered with GCM");
+			}
 			mRegisterTask = new AsyncTask<Void, Void, Void>() {
 				@Override
 				protected Void doInBackground(Void... params) {
-					// Register on our server
-					// On server creates a new user
-					// ServerUtilities.register(context, "", "", regId);
+					ServerUtilities.register(context, "", "", regId);
 					return null;
 				}
-
 				@Override
 				protected void onPostExecute(Void result) {
 					mRegisterTask = null;
@@ -93,17 +98,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			ConnectivityManager cn = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo nf = cn.getActiveNetworkInfo();
 			if (nf != null && nf.isConnected() == true) {
-				// Toast.makeText(this, "Network Available",
-				// Toast.LENGTH_LONG).show();
 				Log.i("check net", "Network Available");
 				return true;
-			} else {
-				// Toast.makeText(this, "Network Not Available",
-				// Toast.LENGTH_LONG)
-				// .show();
+			} else {				
 				Log.i("check net", "Network not Available");
 				return false;
-
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -113,8 +112,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-
+		// TODO Auto-generated method stub		
 		switch (v.getId()) {
 		case R.id.btnlogin:
 			String username = mEdit_User.getText().toString().trim();
@@ -137,17 +135,19 @@ public class MainActivity extends Activity implements OnClickListener {
 			ServerUtilities.network_check = checkNetwork();
 			if (ServerUtilities.network_check) {
 				if (regId.equals("")) {
-					GCMRegistrar.register(this, SENDER_ID);
+				//	GCMRegistrar.register(this, SENDER_ID);
 					regId = GCMRegistrar.getRegistrationId(this);
 					Log.d("register", "start register");
 				}
-				Log.e("Reg Id",regId);
+				
 				if (regId.equals("")) {
+					Log.e("Reg Id","Khong lay dc ID");
 					Toast.makeText(this, this.getString(R.string.Err_101),
 							Toast.LENGTH_LONG).show();
 					 regId = GCMRegistrar.getRegistrationId(this);
-					// Log.e("try again Reg Id",regId);
+					 
 				} else {
+					 Log.e("Reg Id",regId);
 					String jsonString = ServerUtilities.login(username, pass,
 							this.regId);
 					userDataJson userJson = new userDataJson(jsonString,

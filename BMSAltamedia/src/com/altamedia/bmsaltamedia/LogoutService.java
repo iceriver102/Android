@@ -33,9 +33,6 @@ public class LogoutService extends Service {
 					while (true) {
 						runLogout();
 						Thread.sleep(LogoutService.time);
-						// runNotifycation();
-						
-
 					}
 				} catch (Exception e) {
 

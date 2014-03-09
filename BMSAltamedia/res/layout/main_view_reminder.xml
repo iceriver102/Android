@@ -67,10 +67,7 @@
         android:id="@+id/bgTransparent"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/ListReminder"
-        android:layout_marginLeft="159dp"
-        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true"
         android:src="@drawable/logo_background" />
 
 </RelativeLayout>

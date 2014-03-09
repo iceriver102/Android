@@ -114,27 +114,27 @@ public class ListView_Reminder extends Activity implements OnClickListener {
 		dataAppSave.savePreferences(this, "user_id",
 				String.valueOf(user.user_id));
 
-		DisplayMetrics displaymetrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		int height = displaymetrics.heightPixels;
-		int width = displaymetrics.widthPixels;
-		ImageView img_tran = (ImageView) findViewById(R.id.bgTransparent);
+	//	DisplayMetrics displaymetrics = new DisplayMetrics();
+		//getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+	//	int height = displaymetrics.heightPixels;
+	//	int width = displaymetrics.widthPixels;
+	//	ImageView img_tran = (ImageView) findViewById(R.id.bgTransparent);
 		// img_tran.getHeight();
-		int left_margin = width / 2 - 150;
-		int top_margin = height / 2 - 150;
-		int right_margin = width / 2 + 150;
-		int bottom_margin = height / 2 + 150;
-		Log.i("Screen", width + "," + height);
+	//	int left_margin = width / 2 - 150;
+	//	int top_margin = height / 2 - 150;
+		//int right_margin = width / 2 + 150;
+		//int bottom_margin = height / 2 + 150;
+	//	Log.i("Screen", width + "," + height);
 		// image = (ImageView) findViewById(R.id.imageID);
-		MarginLayoutParams marginParams = new MarginLayoutParams(
-				img_tran.getLayoutParams());
+	//	MarginLayoutParams marginParams = new MarginLayoutParams(
+				//img_tran.getLayoutParams());
 	/*	marginParams.setMargins(left_margin, top_margin, right_margin,
 				bottom_margin);*/
-		marginParams.setMargins(left_margin, top_margin, 10,
-				10);
-		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-				marginParams);
-		img_tran.setLayoutParams(layoutParams);
+		//marginParams.setMargins(left_margin, top_margin, 10,
+			//	10);
+		//RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+		//		marginParams);
+		//img_tran.setLayoutParams(layoutParams);
 
 	}
 

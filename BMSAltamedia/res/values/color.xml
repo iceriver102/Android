@@ -17,7 +17,7 @@
 	<color name="transparent">#00000000</color>
 	<color name="blue">#3399cc</color>
 	<color name="yellow">#f2ec3e</color>
-	<color name="color_last_remender">#64009cff</color>
-	<color name="color_curent">#ffc4c4</color>
-	<color name="color_upcomming">#c9fbfa</color>
+	<color name="color_last_remender">#ffc4c4</color>
+	<color name="color_curent">#c9fbfa</color>
+	<color name="color_upcomming">#64009cff</color>
 </resources>

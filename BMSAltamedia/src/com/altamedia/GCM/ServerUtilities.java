@@ -112,14 +112,7 @@ public class ServerUtilities {
 
 	public static boolean complete(reminderData remind, int user_id,
 			String access) {
-		/*
-		 * http://bms.altamedia.vn/api.php?mod=reminder_action
-		 * 
-		 * user_id id type : task/project (lấy từ get_reminder) action :
-		 * complete
-		 * 
-		 * return { result : true/false msg : }
-		 */
+		 
 		if (network_check) {
 			String serverUrl = SERVER_URL;
 			try {
@@ -156,29 +149,17 @@ public class ServerUtilities {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("regId", regId);
 		params.put("name", name);
-		params.put("email", email);
-		Log.i(TAG, "registering device (email = " + email + ")");
+		params.put("email", email);		
 		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
-		// Once GCM returns a registration id, we need to register on our server
-		// As the server might be down, we will retry it a couple
-		// times.
+		
 		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
 			Log.d(TAG, "Attempt #" + i + " to register");
-			try {
-				Log.i(TAG, "Run register ");
-				// displayMessage(context, context.getString(
-				// R.string.server_registering, i, MAX_ATTEMPTS));
+			try {				
 				post(serverUrl, params);
 				GCMRegistrar.setRegisteredOnServer(context, true);
-				// String message =
-				// context.getString(R.string.server_registered);
-				// CommonUtilities.displayMessage(context, message, "");
 				return;
 			} catch (IOException e) {
-				// Here we are simplifying and retrying on any error; in a real
-				// application, it should retry only on unrecoverable errors
-				// (like HTTP error code 503).
-				Log.e(TAG, "Failed to register on attempt " + i + ":" + e);
+				Log.e(TAG, "Failed to register on attempt " + i + ":" + e.getMessage());
 				if (i == MAX_ATTEMPTS) {
 					break;
 				}
@@ -195,9 +176,6 @@ public class ServerUtilities {
 				backoff *= 2;
 			}
 		}
-		// String message = context.getString(R.string.server_register_error,
-		// MAX_ATTEMPTS);
-		// CommonUtilities.displayMessage(context, message);
 	}
 
 	/**
@@ -222,7 +200,6 @@ public class ServerUtilities {
 	 */
 	private static void post(String endpoint, Map<String, String> params)
 			throws IOException {
-		Log.i(TAG, "Run Post ");
 		URL url;
 		try {
 			url = new URL(endpoint);
